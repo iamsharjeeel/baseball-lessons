@@ -1,0 +1,24 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply m-0 bg-night-black font-body text-chalk-white antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-clay-red;
+  }
+}
