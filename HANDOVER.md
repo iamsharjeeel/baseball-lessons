@@ -73,3 +73,103 @@
 - Meta Pixel noscript fallback omitted until a real pixel ID is confirmed.
 
 **Next session should start with:** Build Section 2 (Trust bar) and Section 3 (The Lineup / How It Works with the Lineup Card component). Consider building the sticky mobile CTA bar (Section 10) in parallel since it's high-leverage for mobile ad traffic.
+
+## Session 2 — 2026-06-30
+**Goal this session:** v2 stack migration (Next.js 15 + GSAP) and full-page build per updated `AGENT_INSTRUCTIONS.md` / `DESIGN_SYSTEM.md` v2 — all 10 content sections with layout choreography, motion system, and composition checks.
+
+**What got done:**
+- Migrated from Vite (PR #1) to **Next.js 15 App Router** + Tailwind v4 + GSAP/`@gsap/react`/`ScrollTrigger`.
+- Archived v1 build to `/legacy-vite-build` (untouched reference).
+- Built all sections in spec order: Hero (with integrated TrustBar), Lineup, Coaches, HitTrax, Programs, Testimonials, Faq, FinalCta, StickyMobileCta.
+- Reused single `StatReadoutPanel` in Hero (mount-triggered count-up) and HitTrax (scroll-triggered, larger, with plain-language stat explanations).
+- Wired UTM capture + Meta Pixel (`NEXT_PUBLIC_META_PIXEL_ID`) on all conversion CTAs; Meet the coaches link excluded from Lead tracking.
+- `npm run build` passes with zero errors.
+
+**How each section actually looks (composition notes):**
+
+- **Hero + TrustBar (one viewport unit):** `min-h-svh` column. Desktop: left-aligned copy hugs the `page-container` left edge at 4rem H1; stat panel sits right with clay-red radial glow + faint scoreboard grid texture behind it. Thin Steel-300 divider, then TrustBar grid (4 items with left accent borders) sits at the bottom of the hero — no scroll gap between hero CTA and trust facts. GSAP load sequence: eyebrow → H1 lines → subhead/CTA → delayed stat border draw + count-up.
+- **TrustBar:** 2×2 mobile / 4-col desktop. First two slots show `[ ]` in amber with "Pending from client" sublabels. Last two are text-only with left border anchors. Composition check: **pass** — anchored to hero divider above and container edges.
+- **Lineup:** Left column H2/subhead anchored to container left; Lineup Card fills right column at lg. Card rows stagger in 1–5 order on scroll. Composition check: **pass** — two-column anchor layout, not centered floating block.
+- **Coaches:** Copy block left-aligned with secondary "Meet the coaches" link; dashed placeholder card right. Composition check: **pass**.
+- **HitTrax:** Turf-green top border tint on section; copy left, reused StatReadoutPanel right with explanations under each stat. Composition check: **pass**.
+- **Programs:** H2 anchored via left amber border accent; 3 cards in a row with featured package clay-red top border. Pricing placeholders are dashed `[ ] price` blocks. Composition check: **pass** — cards span full container width.
+- **Testimonials:** Three dashed placeholder cards in a row — clearly not real quotes. Composition check: **pass**.
+- **Faq:** Accordion spans left edge of container (`max-w-3xl`), bordered top/bottom. No invented section H2 (spec has none). Composition check: **pass**, though accordion is narrower than full container — intentional readable measure, anchored to left edge.
+- **FinalCta:** Steel-700 band with clay-red left border accent; copy + phone/address left, CTA right at lg. Composition check: **pass**.
+- **StickyMobileCta:** Fixed bottom bar, `lg:hidden`, slides up via ScrollTrigger when hero bottom crosses viewport top. Composition check: **pass**.
+
+**Decisions made (and why):**
+- Pinned **Next.js 15** (not 16 from latest create-next-app) per `AGENT_INSTRUCTIONS.md`.
+- Hero includes TrustBar per layout choreography ("one composed unit") even though TrustBar is a separate component file.
+- Big Shoulders loaded via CSS `@import` (next/font/google lacked override metrics); Inter + JetBrains Mono via `next/font`.
+- FAQ section has no H2 in `CONTENT_SPEC.md` — used `aria-label` only, no invented heading.
+- "Book a Lesson" uses `SecondaryButton` with Lead tracking; "Meet the coaches" has `trackConversion={false}` since it's the allowed exit link.
+
+**Waiting on client / open questions:**
+- `NEXT_PUBLIC_META_PIXEL_ID` for production Meta Pixel
+- Trust bar stats, pricing, testimonials, coach bios — all still `[ ]` placeholders
+- Lead capture handler still stubbed (`// TODO` on PrimaryButton)
+- GSAP cleanup: all `useGSAP` calls use scoped refs; **moderately confident** cleanup is correct — not manually verified via route remount testing in dev
+
+**Known issues / not done yet:**
+- First Load JS ~153KB uncompressed per `next build` (Next.js framework overhead; page-specific chunk ~5.4KB gzipped). Higher than v1's ~62KB total gzipped — expected Next.js tax, not GSAP bloat, but worth monitoring.
+- No `noindex` meta yet (CONTENT_SPEC says confirm with Sharjeel)
+- Meta Pixel noscript fallback not added
+
+**Next session should start with:** Visual QA at 375/768/1440px in browser; toggle `prefers-reduced-motion` in OS and verify every GSAP animation short-circuits. Wire lead capture once integration path is decided. Set `NEXT_PUBLIC_META_PIXEL_ID` and verify Pixel in Meta Events Manager.
+
+## Session 3 — 2026-06-30
+**Goal this session:** v3 full rebuild — single accent, white-dominant, photo-driven page per updated `DESIGN_SYSTEM.md` v3 and `AGENT_INSTRUCTIONS.md` v3. Rebuild every section fresh (no v2 component reuse).
+
+**What got done:**
+- Pulled v3 docs from `main` and rebuilt all section/UI components from scratch against v3 spec.
+- Generated 3 AI placeholder photos (Cursor `GenerateImage`) using DESIGN_SYSTEM v3 prompts, saved to `/public/images/` (`hero.jpg`, `coach.jpg`, `facility.jpg`), all tagged `data-placeholder="true"`.
+- Implemented v3 palette only: `--paper-white`, `--ink-black`, `--accent`, `--steel-300`, `--steel-700`.
+- Built all 12 sections in AGENT_INSTRUCTIONS build order: Hero (photo + gradient overlay + highlighted "free."), TrustBar, Lineup, Coaches (+ facility photo), HitTrax, Programs, Testimonials (dark beat), FAQ, FinalCta (dark beat), StickyMobileCta.
+- Fresh `StatReadout` component (not v2 `StatReadoutPanel`) used in HitTrax section only — v3 moves stats out of hero per design thesis.
+- Lineup rebuilt as full-width rows (no bordered card, no `overflow:hidden`) with oversized accent numbers in dedicated column + `min-w-0` on content column.
+- `npm run build` and `npm run lint` pass with zero errors.
+- Grep confirmed no v2 color tokens in active codebase (only in `/legacy-vite-build`).
+
+**Photography approach:** Cursor `GenerateImage` with verbatim v3 prompts (photojournalistic, desaturated, indoor cage/coach/facility). Images are placeholders until real NSEC photography arrives.
+
+**Lineup / counter bug verification:**
+- Checked Lineup markup: no `overflow-hidden` on section or parents; rows use `grid` with `min-w-0` on text column and `shrink-0` on number column; numbers live inside row grid, not absolutely positioned.
+- Stat numbers in TrustBar, HitTrax, and Programs live inside normal document flow within `page-container` — no floating/absolute stat elements.
+- Build compiles; responsive classes use single-column stack below `sm` for lineup numbers. **Not browser-tested at 1440/768/375 in this session** — layout structure is intentionally clip-safe but needs human spot-check on preview.
+
+**Honest visual self-assessment vs. reference direction:**
+- **Closer than v2 on:** real photography in hero/coaches/facility; white-dominant page with one dark beat (testimonials + final CTA); single accent color throughout; oversized H1 (`clamp(3rem, 8vw, 6.5rem)`) and stat scale (`clamp(3.5rem, 9vw, 7rem)`); highlighted-word treatment on "free."; fewer bordered cards (only programs + testimonial placeholders).
+- **Still may drift:** AI placeholders may not match the drama/quality of real NSEC reference photography; trust bar `[ ]` placeholders at stat scale look intentionally unfinished (correct per spec but visually loud); hero doesn't yet have the exact "TRAIN LIKE A CHAMPION" gold-block density of the NSEC reference — our headline is longer and more copy-heavy; generous whitespace is improved but Programs/Coaches sections may still feel more "landing page template" than Xovera-level restraint without a live browser review.
+- **Overall:** Directionally aligned with v3 brief (photo-driven, single accent, bigger type) — not confident it fully matches reference quality without stakeholder review on a deployed preview.
+
+**Composition check (all sections):**
+| Section | v3 palette | Photo | Oversized type | Card only where allowed | Clip-safe structure |
+|---|---|---|---|---|---|
+| Hero | ✓ | ✓ hero | ✓ H1 | ✓ no card | ✓ |
+| TrustBar | ✓ | n/a | ✓ stat scale | ✓ no card | ✓ |
+| Lineup | ✓ | n/a | ✓ numbers | ✓ rows not card | ✓ (needs browser QA) |
+| Coaches | ✓ | ✓ coach + facility | ✓ H2 | ✓ no card | ✓ |
+| HitTrax | ✓ | n/a | ✓ stats | ✓ no card | ✓ |
+| Programs | ✓ | n/a | ✓ prices | ✓ cards allowed | ✓ |
+| Testimonials | ✓ dark beat | n/a | ✓ H2 | ✓ inverted placeholders | ✓ |
+| FAQ | ✓ | n/a | — | ✓ no card | ✓ |
+| FinalCta | ✓ dark beat | n/a | ✓ H2 | ✓ no card | ✓ |
+| StickyMobileCta | ✓ | n/a | — | ✓ | ✓ |
+
+**Decisions made (and why):**
+- Stats removed from hero per v3 design thesis (photo-dominant hero); HitTrax section owns the stat readout. CONTENT_SPEC still lists hero stats — v3 design system explicitly overrides.
+- Used `brightness-90` hover on accent CTA instead of a second hex for hover darken — keeps single-accent rule.
+- Facility photo placed in Coaches section (no separate CONTENT_SPEC section) per DESIGN_SYSTEM photography placement #3.
+
+**Waiting on client / open questions:**
+- Real NSEC photography to replace AI placeholders
+- All prior `[ ]` content gaps (pricing, testimonials, trust stats, coach bios)
+- `NEXT_PUBLIC_META_PIXEL_ID`, lead capture wiring, `noindex` confirmation
+
+**Known issues / not done yet:**
+- Browser responsive QA at 375/768/1440 not performed in this environment
+- `prefers-reduced-motion` GSAP fallbacks implemented in code but not OS-toggled in dev
+- First Load JS ~158KB (similar to v2; images add weight outside JS bundle)
+
+**Next session should start with:** Deploy preview URL, browser QA at three breakpoints focusing on Lineup rows and stat sizing, swap AI placeholders when real photos arrive, wire lead capture.
