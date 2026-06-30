@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,600;10..72,700;10..72,800&display=swap');
+@import 'tailwindcss';
+
+@theme inline {
+  --color-night-black: #0b0e11;
+  --color-chalk-white: #f5f3ec;
+  --color-clay-red: #c9462c;
+  --color-turf-green: #2c6b4f;
+  --color-scoreboard-amber: #e8a23d;
+  --color-steel-700: #1b2027;
+  --color-steel-300: #838b94;
+
+  --font-display: 'Big Shoulders', ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-data: var(--font-jetbrains), ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-night-black font-body text-chalk-white antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-clay-red;
+  }
+}
+
+@layer utilities {
+  .page-container {
+    @apply mx-auto w-full max-w-[1180px] px-4 lg:px-8;
+  }
+
+  .section-pad {
+    @apply py-14 lg:py-24;
+  }
+
+  .stat-glow {
+    background-image:
+      radial-gradient(
+        ellipse 80% 70% at 50% 50%,
+        rgb(201 70 44 / 8%),
+        transparent 70%
+      ),
+      linear-gradient(
+        to right,
+        rgb(131 139 148 / 4%) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        rgb(131 139 148 / 4%) 1px,
+        transparent 1px
+      );
+    background-size:
+      100% 100%,
+      24px 24px,
+      24px 24px;
+  }
+}

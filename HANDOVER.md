@@ -73,3 +73,47 @@
 - Meta Pixel noscript fallback omitted until a real pixel ID is confirmed.
 
 **Next session should start with:** Build Section 2 (Trust bar) and Section 3 (The Lineup / How It Works with the Lineup Card component). Consider building the sticky mobile CTA bar (Section 10) in parallel since it's high-leverage for mobile ad traffic.
+
+## Session 2 — 2026-06-30
+**Goal this session:** v2 stack migration (Next.js 15 + GSAP) and full-page build per updated `AGENT_INSTRUCTIONS.md` / `DESIGN_SYSTEM.md` v2 — all 10 content sections with layout choreography, motion system, and composition checks.
+
+**What got done:**
+- Migrated from Vite (PR #1) to **Next.js 15 App Router** + Tailwind v4 + GSAP/`@gsap/react`/`ScrollTrigger`.
+- Archived v1 build to `/legacy-vite-build` (untouched reference).
+- Built all sections in spec order: Hero (with integrated TrustBar), Lineup, Coaches, HitTrax, Programs, Testimonials, Faq, FinalCta, StickyMobileCta.
+- Reused single `StatReadoutPanel` in Hero (mount-triggered count-up) and HitTrax (scroll-triggered, larger, with plain-language stat explanations).
+- Wired UTM capture + Meta Pixel (`NEXT_PUBLIC_META_PIXEL_ID`) on all conversion CTAs; Meet the coaches link excluded from Lead tracking.
+- `npm run build` passes with zero errors.
+
+**How each section actually looks (composition notes):**
+
+- **Hero + TrustBar (one viewport unit):** `min-h-svh` column. Desktop: left-aligned copy hugs the `page-container` left edge at 4rem H1; stat panel sits right with clay-red radial glow + faint scoreboard grid texture behind it. Thin Steel-300 divider, then TrustBar grid (4 items with left accent borders) sits at the bottom of the hero — no scroll gap between hero CTA and trust facts. GSAP load sequence: eyebrow → H1 lines → subhead/CTA → delayed stat border draw + count-up.
+- **TrustBar:** 2×2 mobile / 4-col desktop. First two slots show `[ ]` in amber with "Pending from client" sublabels. Last two are text-only with left border anchors. Composition check: **pass** — anchored to hero divider above and container edges.
+- **Lineup:** Left column H2/subhead anchored to container left; Lineup Card fills right column at lg. Card rows stagger in 1–5 order on scroll. Composition check: **pass** — two-column anchor layout, not centered floating block.
+- **Coaches:** Copy block left-aligned with secondary "Meet the coaches" link; dashed placeholder card right. Composition check: **pass**.
+- **HitTrax:** Turf-green top border tint on section; copy left, reused StatReadoutPanel right with explanations under each stat. Composition check: **pass**.
+- **Programs:** H2 anchored via left amber border accent; 3 cards in a row with featured package clay-red top border. Pricing placeholders are dashed `[ ] price` blocks. Composition check: **pass** — cards span full container width.
+- **Testimonials:** Three dashed placeholder cards in a row — clearly not real quotes. Composition check: **pass**.
+- **Faq:** Accordion spans left edge of container (`max-w-3xl`), bordered top/bottom. No invented section H2 (spec has none). Composition check: **pass**, though accordion is narrower than full container — intentional readable measure, anchored to left edge.
+- **FinalCta:** Steel-700 band with clay-red left border accent; copy + phone/address left, CTA right at lg. Composition check: **pass**.
+- **StickyMobileCta:** Fixed bottom bar, `lg:hidden`, slides up via ScrollTrigger when hero bottom crosses viewport top. Composition check: **pass**.
+
+**Decisions made (and why):**
+- Pinned **Next.js 15** (not 16 from latest create-next-app) per `AGENT_INSTRUCTIONS.md`.
+- Hero includes TrustBar per layout choreography ("one composed unit") even though TrustBar is a separate component file.
+- Big Shoulders loaded via CSS `@import` (next/font/google lacked override metrics); Inter + JetBrains Mono via `next/font`.
+- FAQ section has no H2 in `CONTENT_SPEC.md` — used `aria-label` only, no invented heading.
+- "Book a Lesson" uses `SecondaryButton` with Lead tracking; "Meet the coaches" has `trackConversion={false}` since it's the allowed exit link.
+
+**Waiting on client / open questions:**
+- `NEXT_PUBLIC_META_PIXEL_ID` for production Meta Pixel
+- Trust bar stats, pricing, testimonials, coach bios — all still `[ ]` placeholders
+- Lead capture handler still stubbed (`// TODO` on PrimaryButton)
+- GSAP cleanup: all `useGSAP` calls use scoped refs; **moderately confident** cleanup is correct — not manually verified via route remount testing in dev
+
+**Known issues / not done yet:**
+- First Load JS ~153KB uncompressed per `next build` (Next.js framework overhead; page-specific chunk ~5.4KB gzipped). Higher than v1's ~62KB total gzipped — expected Next.js tax, not GSAP bloat, but worth monitoring.
+- No `noindex` meta yet (CONTENT_SPEC says confirm with Sharjeel)
+- Meta Pixel noscript fallback not added
+
+**Next session should start with:** Visual QA at 375/768/1440px in browser; toggle `prefers-reduced-motion` in OS and verify every GSAP animation short-circuits. Wire lead capture once integration path is decided. Set `NEXT_PUBLIC_META_PIXEL_ID` and verify Pixel in Meta Events Manager.
