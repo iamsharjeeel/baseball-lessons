@@ -5,80 +5,76 @@ import { useGSAP } from '@gsap/react'
 import { gsap, registerGsap } from '@/lib/gsap'
 import { useReducedMotion } from '@/lib/useReducedMotion'
 
-type TrustBarProps = {
-  className?: string
-}
-
-export function TrustBar({ className = '' }: TrustBarProps) {
-  const barRef = useRef<HTMLDivElement>(null)
+export function TrustBar() {
+  const ref = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
 
   useGSAP(
     () => {
       registerGsap()
-      const bar = barRef.current
-      if (!bar || reducedMotion) return
+      const el = ref.current
+      if (!el || reducedMotion) return
 
-      const statEls = bar.querySelectorAll('[data-trust-stat]')
-      statEls.forEach((el) => {
-        const isPlaceholder = el.getAttribute('data-placeholder') === 'true'
-        if (isPlaceholder) return
-
-        const target = Number(el.getAttribute('data-target') ?? 0)
-        const suffix = el.getAttribute('data-suffix') ?? ''
+      const statEls = el.querySelectorAll('[data-count]')
+      statEls.forEach((node) => {
+        if (node.getAttribute('data-placeholder') === 'true') return
+        const target = Number(node.getAttribute('data-target') ?? 0)
+        const suffix = node.getAttribute('data-suffix') ?? ''
         const counter = { val: 0 }
         gsap.to(counter, {
           val: target,
           duration: 0.9,
           ease: 'power2.out',
           scrollTrigger: {
-            trigger: bar,
+            trigger: el,
             start: 'top 90%',
             toggleActions: 'play none none none',
           },
           onUpdate: () => {
-            el.textContent = `${Math.round(counter.val)}${suffix}`
+            node.textContent = `${Math.round(counter.val)}${suffix}`
           },
         })
       })
     },
-    { scope: barRef, dependencies: [reducedMotion] },
+    { scope: ref, dependencies: [reducedMotion] },
   )
 
   return (
     <div
-      ref={barRef}
-      className={`grid grid-cols-2 gap-x-4 gap-y-6 border-t border-steel-300/15 py-6 lg:grid-cols-4 lg:gap-6 lg:py-8 ${className}`}
+      ref={ref}
+      className="page-container border-t border-steel-300/20 py-10 lg:py-12"
       aria-label="Facility credentials"
     >
-      <div className="border-l-2 border-scoreboard-amber/40 pl-4">
-        <p className="font-data text-2xl font-bold tabular-nums text-scoreboard-amber lg:text-3xl">
-          <span data-trust-stat data-placeholder="true">[ ]</span>
-        </p>
-        <p className="mt-1 text-sm text-chalk-white">
-          years combined coaching experience
-        </p>
-        <p className="mt-1 text-xs text-steel-300">Pending from client</p>
-      </div>
+      <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-8">
+        <div>
+          <p className="font-data type-stat font-bold leading-none text-accent tabular-nums">
+            <span data-count data-placeholder="true">[ ]</span>
+          </p>
+          <p className="mt-3 text-sm text-ink-black">
+            years combined coaching experience
+          </p>
+          <p className="mt-1 text-xs text-steel-300">Pending from client</p>
+        </div>
 
-      <div className="border-l-2 border-scoreboard-amber/40 pl-4">
-        <p className="font-data text-2xl font-bold tabular-nums text-scoreboard-amber lg:text-3xl">
-          <span data-trust-stat data-placeholder="true">[ ]</span>
-        </p>
-        <p className="mt-1 text-sm text-chalk-white">athletes trained</p>
-        <p className="mt-1 text-xs text-steel-300">Pending from client</p>
-      </div>
+        <div>
+          <p className="font-data type-stat font-bold leading-none text-accent tabular-nums">
+            <span data-count data-placeholder="true">[ ]</span>
+          </p>
+          <p className="mt-3 text-sm text-ink-black">athletes trained</p>
+          <p className="mt-1 text-xs text-steel-300">Pending from client</p>
+        </div>
 
-      <div className="border-l-2 border-steel-300/30 pl-4">
-        <p className="font-display text-base font-semibold leading-snug text-chalk-white lg:text-lg">
-          College &amp; pro-level coaching staff
-        </p>
-      </div>
+        <div className="col-span-2 lg:col-span-1">
+          <p className="font-display text-lg font-semibold leading-snug text-ink-black lg:text-xl">
+            College &amp; pro-level coaching staff
+          </p>
+        </div>
 
-      <div className="border-l-2 border-steel-300/30 pl-4">
-        <p className="font-display text-base font-semibold leading-snug text-chalk-white lg:text-lg">
-          HitTrax-equipped facility
-        </p>
+        <div className="col-span-2 lg:col-span-1">
+          <p className="font-display text-lg font-semibold leading-snug text-ink-black lg:text-xl">
+            HitTrax-equipped facility
+          </p>
+        </div>
       </div>
     </div>
   )

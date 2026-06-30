@@ -117,3 +117,59 @@
 - Meta Pixel noscript fallback not added
 
 **Next session should start with:** Visual QA at 375/768/1440px in browser; toggle `prefers-reduced-motion` in OS and verify every GSAP animation short-circuits. Wire lead capture once integration path is decided. Set `NEXT_PUBLIC_META_PIXEL_ID` and verify Pixel in Meta Events Manager.
+
+## Session 3 — 2026-06-30
+**Goal this session:** v3 full rebuild — single accent, white-dominant, photo-driven page per updated `DESIGN_SYSTEM.md` v3 and `AGENT_INSTRUCTIONS.md` v3. Rebuild every section fresh (no v2 component reuse).
+
+**What got done:**
+- Pulled v3 docs from `main` and rebuilt all section/UI components from scratch against v3 spec.
+- Generated 3 AI placeholder photos (Cursor `GenerateImage`) using DESIGN_SYSTEM v3 prompts, saved to `/public/images/` (`hero.jpg`, `coach.jpg`, `facility.jpg`), all tagged `data-placeholder="true"`.
+- Implemented v3 palette only: `--paper-white`, `--ink-black`, `--accent`, `--steel-300`, `--steel-700`.
+- Built all 12 sections in AGENT_INSTRUCTIONS build order: Hero (photo + gradient overlay + highlighted "free."), TrustBar, Lineup, Coaches (+ facility photo), HitTrax, Programs, Testimonials (dark beat), FAQ, FinalCta (dark beat), StickyMobileCta.
+- Fresh `StatReadout` component (not v2 `StatReadoutPanel`) used in HitTrax section only — v3 moves stats out of hero per design thesis.
+- Lineup rebuilt as full-width rows (no bordered card, no `overflow:hidden`) with oversized accent numbers in dedicated column + `min-w-0` on content column.
+- `npm run build` and `npm run lint` pass with zero errors.
+- Grep confirmed no v2 color tokens in active codebase (only in `/legacy-vite-build`).
+
+**Photography approach:** Cursor `GenerateImage` with verbatim v3 prompts (photojournalistic, desaturated, indoor cage/coach/facility). Images are placeholders until real NSEC photography arrives.
+
+**Lineup / counter bug verification:**
+- Checked Lineup markup: no `overflow-hidden` on section or parents; rows use `grid` with `min-w-0` on text column and `shrink-0` on number column; numbers live inside row grid, not absolutely positioned.
+- Stat numbers in TrustBar, HitTrax, and Programs live inside normal document flow within `page-container` — no floating/absolute stat elements.
+- Build compiles; responsive classes use single-column stack below `sm` for lineup numbers. **Not browser-tested at 1440/768/375 in this session** — layout structure is intentionally clip-safe but needs human spot-check on preview.
+
+**Honest visual self-assessment vs. reference direction:**
+- **Closer than v2 on:** real photography in hero/coaches/facility; white-dominant page with one dark beat (testimonials + final CTA); single accent color throughout; oversized H1 (`clamp(3rem, 8vw, 6.5rem)`) and stat scale (`clamp(3.5rem, 9vw, 7rem)`); highlighted-word treatment on "free."; fewer bordered cards (only programs + testimonial placeholders).
+- **Still may drift:** AI placeholders may not match the drama/quality of real NSEC reference photography; trust bar `[ ]` placeholders at stat scale look intentionally unfinished (correct per spec but visually loud); hero doesn't yet have the exact "TRAIN LIKE A CHAMPION" gold-block density of the NSEC reference — our headline is longer and more copy-heavy; generous whitespace is improved but Programs/Coaches sections may still feel more "landing page template" than Xovera-level restraint without a live browser review.
+- **Overall:** Directionally aligned with v3 brief (photo-driven, single accent, bigger type) — not confident it fully matches reference quality without stakeholder review on a deployed preview.
+
+**Composition check (all sections):**
+| Section | v3 palette | Photo | Oversized type | Card only where allowed | Clip-safe structure |
+|---|---|---|---|---|---|
+| Hero | ✓ | ✓ hero | ✓ H1 | ✓ no card | ✓ |
+| TrustBar | ✓ | n/a | ✓ stat scale | ✓ no card | ✓ |
+| Lineup | ✓ | n/a | ✓ numbers | ✓ rows not card | ✓ (needs browser QA) |
+| Coaches | ✓ | ✓ coach + facility | ✓ H2 | ✓ no card | ✓ |
+| HitTrax | ✓ | n/a | ✓ stats | ✓ no card | ✓ |
+| Programs | ✓ | n/a | ✓ prices | ✓ cards allowed | ✓ |
+| Testimonials | ✓ dark beat | n/a | ✓ H2 | ✓ inverted placeholders | ✓ |
+| FAQ | ✓ | n/a | — | ✓ no card | ✓ |
+| FinalCta | ✓ dark beat | n/a | ✓ H2 | ✓ no card | ✓ |
+| StickyMobileCta | ✓ | n/a | — | ✓ | ✓ |
+
+**Decisions made (and why):**
+- Stats removed from hero per v3 design thesis (photo-dominant hero); HitTrax section owns the stat readout. CONTENT_SPEC still lists hero stats — v3 design system explicitly overrides.
+- Used `brightness-90` hover on accent CTA instead of a second hex for hover darken — keeps single-accent rule.
+- Facility photo placed in Coaches section (no separate CONTENT_SPEC section) per DESIGN_SYSTEM photography placement #3.
+
+**Waiting on client / open questions:**
+- Real NSEC photography to replace AI placeholders
+- All prior `[ ]` content gaps (pricing, testimonials, trust stats, coach bios)
+- `NEXT_PUBLIC_META_PIXEL_ID`, lead capture wiring, `noindex` confirmation
+
+**Known issues / not done yet:**
+- Browser responsive QA at 375/768/1440 not performed in this environment
+- `prefers-reduced-motion` GSAP fallbacks implemented in code but not OS-toggled in dev
+- First Load JS ~158KB (similar to v2; images add weight outside JS bundle)
+
+**Next session should start with:** Deploy preview URL, browser QA at three breakpoints focusing on Lineup rows and stat sizing, swap AI placeholders when real photos arrive, wire lead capture.

@@ -23,7 +23,6 @@ export function StickyMobileCta() {
       }
 
       gsap.set(bar, { y: '100%' })
-
       gsap.to(bar, {
         y: 0,
         duration: 0.25,
@@ -41,7 +40,7 @@ export function StickyMobileCta() {
   return (
     <div
       ref={barRef}
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-steel-300/20 bg-night-black/95 p-3 backdrop-blur-sm lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-steel-300/20 bg-paper-white/95 p-3 backdrop-blur-sm lg:hidden"
       aria-label="Book evaluation"
     >
       <PrimaryButton fullWidth />

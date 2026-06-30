@@ -2,13 +2,11 @@
 @import 'tailwindcss';
 
 @theme inline {
-  --color-night-black: #0b0e11;
-  --color-chalk-white: #f5f3ec;
-  --color-clay-red: #c9462c;
-  --color-turf-green: #2c6b4f;
-  --color-scoreboard-amber: #e8a23d;
-  --color-steel-700: #1b2027;
+  --color-paper-white: #fafaf8;
+  --color-ink-black: #0b0e11;
+  --color-accent: #c9462c;
   --color-steel-300: #838b94;
+  --color-steel-700: #1b2027;
 
   --font-display: 'Big Shoulders', ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -27,13 +25,13 @@
   }
 
   body {
-    @apply bg-night-black font-body text-chalk-white antialiased;
+    @apply bg-paper-white font-body text-ink-black antialiased;
     font-size: 1rem;
     line-height: 1.6;
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-clay-red;
+    @apply outline-2 outline-offset-2 outline-accent;
   }
 }
 
@@ -43,29 +41,27 @@
   }
 
   .section-pad {
-    @apply py-14 lg:py-24;
+    @apply py-14 lg:py-[120px];
   }
 
-  .stat-glow {
-    background-image:
-      radial-gradient(
-        ellipse 80% 70% at 50% 50%,
-        rgb(201 70 44 / 8%),
-        transparent 70%
-      ),
-      linear-gradient(
-        to right,
-        rgb(131 139 148 / 4%) 1px,
-        transparent 1px
-      ),
-      linear-gradient(
-        to bottom,
-        rgb(131 139 148 / 4%) 1px,
-        transparent 1px
-      );
-    background-size:
-      100% 100%,
-      24px 24px,
-      24px 24px;
+  .type-hero {
+    font-size: clamp(3rem, 8vw, 6.5rem);
+  }
+
+  .type-stat {
+    font-size: clamp(3.5rem, 9vw, 7rem);
+  }
+
+  .type-h2 {
+    font-size: clamp(2.25rem, 5vw, 4rem);
+  }
+
+  .photo-gradient {
+    background: linear-gradient(
+      to top,
+      rgb(11 14 17 / 70%) 0%,
+      rgb(11 14 17 / 40%) 35%,
+      transparent 60%
+    );
   }
 }

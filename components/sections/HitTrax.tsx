@@ -1,7 +1,7 @@
 import { SectionReveal } from '@/components/ui/SectionReveal'
-import { StatReadoutPanel } from '@/components/ui/StatReadoutPanel'
+import { StatReadout } from '@/components/ui/StatReadout'
 
-const HITTRAX_STATS = [
+const STATS = [
   {
     label: 'Exit Velo',
     value: 78,
@@ -29,22 +29,22 @@ export function HitTrax() {
   return (
     <section
       id="hittrax"
-      className="section-pad border-t border-turf-green/30 bg-[linear-gradient(180deg,rgb(44_107_79/0.12)_0%,transparent_100%)]"
+      className="section-pad bg-paper-white"
       aria-labelledby="hittrax-heading"
     >
       <SectionReveal className="page-container">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-center lg:gap-16">
+        <div className="grid gap-12 lg:grid-cols-2 lg:items-start lg:gap-20">
           <div className="text-left">
             <h2
               id="hittrax-heading"
               data-reveal
-              className="font-display text-[clamp(1.75rem,3.5vw,2.75rem)] font-bold text-chalk-white"
+              className="type-h2 font-display font-bold text-ink-black"
             >
               Most cages give reps. We give data.
             </h2>
             <p
               data-reveal
-              className="mt-4 max-w-xl text-base leading-relaxed text-chalk-white/85 lg:text-lg"
+              className="mt-6 max-w-xl text-base leading-relaxed text-ink-black/80 lg:text-lg"
             >
               HitTrax is the same real-time performance capture system used by
               college and professional programs. Every swing becomes a number —
@@ -53,12 +53,11 @@ export function HitTrax() {
             </p>
           </div>
 
-          <div data-reveal className="w-full">
-            <StatReadoutPanel
-              stats={HITTRAX_STATS}
-              size="large"
+          <div data-reveal className="w-full min-w-0">
+            <StatReadout
+              stats={STATS}
+              caption="Real HitTrax output from an NSEC training session"
               trigger="scroll"
-              showGlow
             />
           </div>
         </div>

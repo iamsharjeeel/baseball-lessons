@@ -10,7 +10,7 @@ import { StickyMobileCta } from '@/components/ui/StickyMobileCta'
 
 export default function Home() {
   return (
-    <main className="bg-night-black pb-20 lg:pb-0">
+    <main className="bg-paper-white pb-20 lg:pb-0">
       <Hero />
       <Lineup />
       <Coaches />
