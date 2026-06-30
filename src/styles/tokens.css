@@ -1,0 +1,15 @@
+@theme {
+  --color-night-black: #0b0e11;
+  --color-chalk-white: #f5f3ec;
+  --color-clay-red: #c9462c;
+  --color-turf-green: #2c6b4f;
+  --color-scoreboard-amber: #e8a23d;
+  --color-steel-700: #1b2027;
+  --color-steel-300: #838b94;
+
+  --font-display: 'Big Shoulders', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-data: 'JetBrains Mono', ui-monospace, monospace;
+
+  --max-width-content: 1180px;
+}
