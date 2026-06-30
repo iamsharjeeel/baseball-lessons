@@ -1,102 +1,69 @@
-# Agent Instructions (v2 — Next.js + GSAP)
+# Agent Instructions (v3 — single accent, white-dominant, real photography)
 
-Read this fully before writing any code. This version is intentionally more explicit than v1's instructions were — v1 left too much layout/motion judgment to interpretation, which is most of why the first build came out flat. Don't fill gaps with your own judgment here; if something genuinely isn't covered, stop and log a question in `HANDOVER.md` instead of guessing.
+Read this fully before writing any code.
 
-## Reading order, every session, no exceptions
-1. **`HANDOVER.md`** — read the most recent entries first. This tells you the actual current state of the repo, which may not match what you'd assume from the file tree alone.
+## Read this first: what actually went wrong last time
+The v2 build was reviewed against two references (a prior NSEC-style page with real photography and gold/black contrast, and a B2B SaaS page with oversized type and confident whitespace) and came out hideous by comparison, for three concrete, fixable reasons:
+
+1. **Zero photography anywhere on the page.** A page selling in-person athletic coaching had no photos of athletes at all.
+2. **Three accent colors (Clay Red, Turf Green, Scoreboard Amber) competing for attention** instead of one color doing all the work.
+3. **Type and stats were undersized and over-boxed** — everything sat in small bordered `--steel-700` cards instead of being given real scale and room to breathe.
+
+There were also two outright bugs in the v2 build: the Lineup Card section was visually cropped/cut off, and counter/stat numbers appeared stranded on the right side of the page with no layout container around them. Both are layout/CSS bugs, not design decisions — find and fix the root cause (likely an `overflow: hidden` or fixed-height container clipping content, and an absolutely-positioned element with no relative parent) rather than papering over them.
+
+**Do not reuse any visual code from the v2 build.** Read `DESIGN_SYSTEM.md` v3 in full and build fresh against it. The v2 hero/section screenshots are the failure case, not a starting point.
+
+## Reading order, every session
+1. **`HANDOVER.md`** — most recent entries first
 2. `README.md`
-3. `DESIGN_SYSTEM.md` v2 — **read "Layout choreography" and "Motion system" in full before touching any component.** These two sections are the entire reason this is a v2 rebuild.
-4. `CONTENT_SPEC.md` — copy is unchanged from v1, still use it verbatim
+3. **`DESIGN_SYSTEM.md` v3 in full** — pay specific attention to "Background strategy," "Photography," and "Layout," since those are the three sections that fix the actual problems found in review
+4. `CONTENT_SPEC.md` — copy is unchanged, still use it verbatim
 
-## This is a stack migration, not a patch
-PR #1 built a Vite + React project. This version is **Next.js 15, App Router**. Do not try to incrementally convert the Vite project — start a clean Next.js app and port over the hero section's logic/copy (it was content-correct, just composed flat), rather than retrofitting Vite config into Next.js config.
+## Stack (unchanged from v2)
+- Next.js 15, App Router, TypeScript, Tailwind v4
+- `gsap` + `@gsap/react`, no Three.js
+- If the v2 Next.js scaffold already exists and is structurally sound, keep the scaffold (package.json, config, folder structure) but rebuild every section component from scratch against v3's spec — don't patch v2 component code with new colors.
 
-```
-npx create-next-app@latest . --typescript --tailwind --app --no-src-dir --import-alias "@/*"
-```
+## Photography — do this before building any section that needs an image
+Per `DESIGN_SYSTEM.md` v3's "Photography" section, every image on this page is an AI-generated placeholder for now (real NSEC photos come later). Use the exact prompt directions given there for: hero shot, coach shot, facility shot. Whatever image generation tool is available in this environment, generate all required images first as a batch, save them to `/public/images/`, and tag every `<img>` or background-image usage with `data-placeholder="true"` so they're easy to find and swap later. Don't substitute generic stock photography or skip the photography layer — that's the single most important fix in this version.
 
-If the existing Vite files are still in the repo root when you start, move them to a `/legacy-vite-build` folder rather than deleting outright — don't destroy the working hero reference without a fallback.
+## Color enforcement — this is a hard rule, not a guideline
+`DESIGN_SYSTEM.md` v3 cuts the palette to one accent color (`--accent`, the clay red). If you find yourself reaching for a second accent color "just for this one element" — don't. Every emphasis need gets solved with `--accent`, oversized type, or whitespace, never a new color. Before finishing, grep the codebase for any hex values or color tokens outside the v3 palette (`--paper-white`, `--ink-black`, `--accent`, `--steel-300`, `--steel-700`) and remove them.
 
-## Dependencies to install
-```
-npm install gsap @gsap/react
-```
+## Build order
+1. Generate placeholder photography (see above) — do this first, sections depend on it
+2. `lib/gsap.ts`, `lib/useReducedMotion.ts`
+3. **Hero** — full-bleed photo, gradient overlay, oversized H1 with the highlighted-word treatment, CTA. This is the section that most directly needs to match the NSEC reference's composition (photo-dominant, text composited over it) — get this right before moving on.
+4. **Trust bar** — white background, oversized stat numbers in `--accent`
+5. **Lineup** — rebuilt full-width per v3 spec, not the cropped card from v2. Test this section specifically at 1440px, 768px, and 375px before moving on, since it's the section that broke last time.
+6. **Coaches** — white background, real photo placeholder, credibility copy
+7. **HitTrax section** — dedicated stat readout, oversized numbers, white background
+8. **Programs/pricing** — the one section that keeps visible card surfaces
+9. **Testimonials** — `--ink-black` background, `--paper-white` testimonial card (inverted), per v3 spec
+10. **FAQ** — white background
+11. **Final CTA** — `--ink-black` background, matching the testimonials section's dark beat
+12. **Sticky mobile CTA**
 
-Do not install any Three.js, react-three-fiber, or WebGL-related packages — explicitly out of scope per `DESIGN_SYSTEM.md` v2's "Stack" section.
+## Composition check (apply to every section before calling it done)
+- Does this section use only the v3 palette? (See "Color enforcement" above.)
+- Is there a real photo (or AI placeholder) anywhere this section calls for one per `DESIGN_SYSTEM.md`?
+- Are stat numbers and the H1 actually hitting the oversized scale specified in v3's Typography section, or did they default back to something smaller and "safer"? Check the actual rendered pixel size, don't assume the clamp() value is being respected.
+- Is anything in a bordered card that doesn't need to be? (Only Programs/pricing and the dark-section testimonial should have visible card surfaces in v3.)
+- At 1440px, 768px, and 375px — is anything clipped, cropped, or stranded outside its parent container? This check exists specifically because of the v2 Lineup Card and counter bugs — don't skip it.
 
-## Folder structure
-```
-/app
-  layout.tsx
-  page.tsx
-  globals.css            <- design tokens as CSS variables, from DESIGN_SYSTEM.md
-/components
-  /sections               <- one component per CONTENT_SPEC.md section, in build order
-    Hero.tsx
-    TrustBar.tsx
-    Lineup.tsx
-    Coaches.tsx
-    HitTrax.tsx
-    Programs.tsx
-    Testimonials.tsx
-    Faq.tsx
-    FinalCta.tsx
-  /ui                      <- shared components
-    PrimaryButton.tsx
-    StatReadoutPanel.tsx   <- reused by Hero.tsx and HitTrax.tsx, build once
-    LineupCard.tsx
-    StickyMobileCta.tsx
-/lib
-  gsap.ts                  <- GSAP + ScrollTrigger registration, shared across components
-  useReducedMotion.ts      <- shared hook wrapping prefers-reduced-motion check
-README.md
-DESIGN_SYSTEM.md
-CONTENT_SPEC.md
-AGENT_INSTRUCTIONS.md
-HANDOVER.md
-```
+## Rules that don't change from v2
+- Every `[ ]` placeholder in `CONTENT_SPEC.md` (pricing, testimonials, trust bar stats) stays visibly flagged — never invent real-looking numbers or quotes. Note: photography placeholders are different from these — photos get generated now per the spec above; pricing/testimonial *text* stays flagged as missing.
+- Every primary CTA says "Book My Free Evaluation," everywhere.
+- No site navigation, no exit links except the phone number and the "Meet the coaches" secondary link.
+- Reuse the stat-readout component between the hero and the dedicated HitTrax section — don't build it twice.
+- UTM capture + Meta Pixel `Lead` event on every CTA.
+- Every GSAP animation respects `prefers-reduced-motion`, verified by toggling the OS setting.
 
-## Build order for this session
-Build and visually check each one **before** moving to the next — don't write all nine sections back-to-back without looking at them, that's exactly how v1 shipped with a composition problem nobody caught until a screenshot review.
+## Before finishing
+- `npm run build` passes with zero errors
+- No console errors/warnings
+- Run the composition check above against all 12 sections, not just spot-checking a few
+- Take a screenshot (or get a Vercel preview URL) of the full page at desktop width and describe in `HANDOVER.md` whether it actually resembles the NSEC/Xovera reference direction — confident, photo-driven, single accent color, generous whitespace — or whether it's drifted back toward the v1/v2 look. Be honest here; the last two handover entries reported sections as "done" without catching that the build looked nothing like the brief, so this self-check matters more than ticking boxes.
 
-1. `lib/gsap.ts` and `lib/useReducedMotion.ts` first — every section depends on these
-2. `Hero.tsx` — this is the highest-stakes section, since it's what's visible without scrolling and what v1 got wrong. Follow `DESIGN_SYSTEM.md`'s "Layout choreography → Hero section" rules literally: left-aligned copy hugging the container edge (not centered-in-column), stat panel with the background glow treatment, trust bar pulled up into the same viewport. **Take a screenshot or describe the rendered layout in `HANDOVER.md` when this is done** so the next reviewer can sanity-check it against the spec without re-reading code.
-3. `TrustBar.tsx`
-4. `Lineup.tsx` (the Lineup Card signature component)
-5. `Coaches.tsx`
-6. `HitTrax.tsx` (reuse `StatReadoutPanel`, don't rebuild it)
-7. `Programs.tsx`
-8. `Testimonials.tsx` (placeholder slot, per `CONTENT_SPEC.md` — do not fabricate quotes)
-9. `Faq.tsx`
-10. `FinalCta.tsx`
-11. `StickyMobileCta.tsx`
-
-## Explicit rules this session (these are not optional / not up to your judgment)
-- **Composition check before calling any section "done":** does every element anchor to a page edge, a divider, or another element — or is something just centered with padding floating around it? If the latter, it's not done. This is the literal failure mode from v1; checking for it explicitly is the whole point of this rebuild.
-- **`[ ]` placeholders in `CONTENT_SPEC.md`** (pricing, testimonials, trust bar stats) stay visibly flagged placeholders. Never invent a real-looking number or quote.
-- **One CTA label everywhere:** "Book My Free Evaluation." No variation.
-- **No site navigation, no exit links** except the phone number and the one secondary "Meet the coaches" link in Section 4.
-- **Reuse `StatReadoutPanel`** between Hero and HitTrax sections — don't build two versions of the same component.
-- **GSAP cleanup:** every `useGSAP()` call needs proper context cleanup so animations don't leak or double-fire on Next.js navigation/remounts. If you're not confident a cleanup is correct, say so explicitly in `HANDOVER.md` rather than shipping it silently.
-
-## Conversion & tracking (unchanged requirements from v1, still apply)
-- Meta Pixel base code, `PageView` on load, `Lead` event on CTA click/form submit
-- Capture UTM params from the URL, forward with lead submission
-- No render-blocking scripts above the fold
-
-## Performance budget
-- LCP under 2.5s on mobile, 4G throttled — GSAP and ScrollTrigger are small, but verify bundle size hasn't crept past v1's ~62KB gzipped by a wide margin once Next.js's own overhead is accounted for
-- Images: WebP/AVIF, properly sized
-- Next.js App Router: use Server Components by default, only mark a component `"use client"` if it actually needs GSAP/interactivity (Hero, HitTrax, StickyMobileCta, Faq accordion, the lead form) — don't blanket the whole tree as client components out of convenience
-
-## Definition of done, per section
-- [ ] Passes the composition check above — nothing is "centered and floating," everything anchors to something
-- [ ] Matches `DESIGN_SYSTEM.md` v2 tokens, layout choreography, and motion spec for that section
-- [ ] Matches `CONTENT_SPEC.md` copy exactly, or deviation is flagged
-- [ ] Responsive at 375px / 768px / 1440px
-- [ ] Keyboard accessible, visible focus states
-- [ ] GSAP animation has a verified (not assumed) `prefers-reduced-motion` fallback
-- [ ] No console errors or warnings
-
-## End of every session
-Append a new dated entry to `HANDOVER.md` before stopping, even mid-task. Include a plain-language description of how each finished section actually looks (not just "built Hero.tsx") — v1's handover said sections were done without flagging that the composition was flat, which is exactly the gap this file exists to close. If you're not sure whether a section's composition is right, say that uncertainty out loud in the entry rather than marking it done.
+## End of session
+Append a new dated entry to `HANDOVER.md`. Include: which sections are built, the photography generation approach used (tool/prompts), confirmation the Lineup Card and stranded-counter bugs are actually fixed (not just "should be" — describe what you checked), and an honest visual self-assessment against the references.
