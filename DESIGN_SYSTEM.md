@@ -1,80 +1,114 @@
-# Design System — NSEC Landing Page
+# Design System — NSEC Landing Page (v2)
 
-## Design thesis
-NSEC's real differentiator isn't "we teach baseball" — every cage in the region says that. It's that they coach with the same real-time data tech (HitTrax) pro and college programs use, delivered entirely 1-on-1. The page should feel like stepping into the facility at night with the lights on and the scoreboard live — not a stock-photo sports-academy template.
+## What changed in v2 and why
+The v1 build (PR #1) implemented the tokens correctly but the page still read flat — centered hero text floating in empty space, no scale contrast, no motion, awkward dead space below the fold. That's not a token problem, it's a **layout choreography and motion** problem. v2 keeps the v1 color/type system (it was right) and adds two things that were missing: explicit spatial/scale rules per section, and a real motion system (GSAP). Stack also moves from Vite to **Next.js App Router** for native Vercel support.
 
-**Signature element — "The Lineup Card."** The customer journey (Evaluation → Plan → 1-on-1 Coaching → Data Tracking → Game-Ready) is a genuine, ordered sequence — close enough to a literal batting order that it's worth styling that way. It's used **once**, deliberately, as the structural device for the "How It Works" section. It is not reused as decorative numbering anywhere else on the page — that restraint is what keeps it feeling intentional instead of templated.
+If you only read one thing in this file, read **"Layout choreography"** below — that's what was actually missing, not the colors.
 
-**Hero treatment.** The hero's stat panel shows a live-feeling HitTrax-style readout (exit velocity, launch angle, distance) that counts up on load. This is the single most characteristic image in NSEC's world — their actual technology differentiator — so it earns the hero's strongest real estate instead of a generic athlete stock photo.
+## Design thesis (unchanged from v1)
+NSEC's differentiator is real-time coaching data (HitTrax) delivered entirely 1-on-1 — not "we teach baseball." The page should feel like the facility at night with the lights on and the scoreboard live.
 
-> **Note on color sourcing:** the palette below is an original system built from the literal materials of the sport — clay, chalk, turf, stadium lights, scoreboard LEDs — not pulled from NSEC's existing brand kit, since exact hex values weren't confirmed at time of writing. Before final build, check nacsportscenter.com's logo files for their real brand hex and swap in if it conflicts. If there's no formal brand guide, this system stands on its own and should be treated as final.
+**Signature element — "The Lineup Card."** The customer journey (Evaluation → Plan → 1-on-1 Coaching → Data Tracking → Game-Ready) is styled as a literal batting order. Used once, in the "How It Works" section only.
 
-## Color tokens
+**Hero treatment.** A live-feeling HitTrax-style stat readout (exit velocity, launch angle, distance) is the hero's visual anchor — NSEC's real technology differentiator, not a stock photo.
+
+## Stack
+- **Next.js 15, App Router**, TypeScript, Tailwind v4
+- **GSAP + `@gsap/react`'s `useGSAP` hook** for all motion (scroll triggers via `ScrollTrigger` plugin)
+- No Three.js, no WebGL — motion budget is GSAP-only. See "Motion system" below; it's louder than v1's was, but still disciplined.
+- Deployed to Vercel using the **Next.js** framework preset (not the Vite preset used in PR #1 — this is a different preset in Vercel project settings if reconfiguring the same project)
+
+## Color tokens (unchanged from v1 — these were correct)
 
 | Token | Hex | Use |
 |---|---|---|
-| `--night-black` | `#0B0E11` | Primary background — stadium-at-night base |
-| `--chalk-white` | `#F5F3EC` | Primary text on dark backgrounds, foul-line accents |
-| `--clay-red` | `#C9462C` | Primary CTA color and primary accent — infield dirt |
-| `--turf-green` | `#2C6B4F` | Secondary accent — used only in the HitTrax section and form-success states |
-| `--scoreboard-amber` | `#E8A23D` | Reserved exclusively for numbers/data: stats, prices, countdowns |
-| `--steel-700` | `#1B2027` | Card surfaces, panel backgrounds on dark |
-| `--steel-300` | `#838B94` | Muted/secondary text, hairline dividers |
+| `--night-black` | `#0B0E11` | Primary background |
+| `--chalk-white` | `#F5F3EC` | Primary text on dark, foul-line accents |
+| `--clay-red` | `#C9462C` | Primary CTA, primary accent |
+| `--turf-green` | `#2C6B4F` | Secondary accent — HitTrax section + success states only |
+| `--scoreboard-amber` | `#E8A23D` | Numbers/data only: stats, prices, countdowns |
+| `--steel-700` | `#1B2027` | Card/panel surfaces |
+| `--steel-300` | `#838B94` | Muted text, hairline dividers |
 
-**Rules, not suggestions:**
-- Clay Red is the *only* color used for the primary CTA button, everywhere. Never amber, never green for "Book My Free Evaluation" — consistency is what makes the eye find it instantly on every scroll position.
-- Scoreboard Amber only touches actual data (stat numbers, prices, a countdown). If you're tempted to use it as a decorative highlight on body text, don't — it dilutes the one place it means something.
-- Turf Green's footprint stays small (HitTrax section + success states only) so it reads as intentional, not as a third competing accent.
+Rules unchanged: Clay Red is the only CTA color, Scoreboard Amber touches numbers only, Turf Green stays small-footprint.
 
-## Typography
+## Typography (unchanged from v1)
 
 | Role | Typeface | Notes |
 |---|---|---|
-| Display (headlines) | Big Shoulders (or Archivo Expanded as fallback) | Condensed, bold, athletic — jersey-numbering feel. Large sizes only (H1/H2/H3), never body copy. |
-| Body | Inter or Public Sans | Humanist, legible at small mobile sizes, used for all paragraph copy and UI labels |
-| Data / stats | JetBrains Mono or IBM Plex Mono, `font-variant-numeric: tabular-nums` | Exclusively for numbers: HitTrax stats, prices, the lineup card's batting-order numbers |
+| Display | Big Shoulders (fallback Archivo Expanded) | Headlines only, never body |
+| Body | Inter or Public Sans | All paragraph copy and UI labels |
+| Data/stats | JetBrains Mono or IBM Plex Mono, tabular-nums | Numbers only |
 
-**Type scale** (mobile base 16px, fluid `clamp()` to desktop):
-- H1: `clamp(2.25rem, 5vw, 4rem)`, Big Shoulders, weight 800, letter-spacing -0.01em
-- H2: `clamp(1.75rem, 3.5vw, 2.75rem)`, Big Shoulders, weight 700
-- H3: `1.25rem`, Big Shoulders, weight 600
-- Body: `1rem`–`1.125rem`, Inter, weight 400, line-height 1.6
-- Data stat (hero / HitTrax section): `clamp(2.5rem, 6vw, 5rem)`, mono, weight 700, tabular-nums
+**v2 addition — scale contrast rule:** v1's hero H1 (`clamp(2.25rem, 5vw, 4rem)`) was too conservative relative to the empty space around it. At desktop widths ≥1280px, the hero H1 should hit the **top of its clamp range** (4rem / 64px) by default, not scale down to fill available width gracefully — oversized, slightly-too-big-for-comfort headlines are what make a hero feel confident instead of polite. Keep the clamp() for responsiveness, but don't let the implementation undershoot it on desktop.
 
-Never substitute the data face for headline text, or vice versa. That mismatch is exactly what signals "this number is real, measured data" vs. "this is marketing copy" — it's doing real communicative work, not just decoration.
+## Layout choreography — read this section carefully, this is what v1 got wrong
 
-## Spacing & layout
-- 8px base unit. Section vertical padding: 96px desktop / 56px mobile.
-- Max content width: 1180px. Hero and stat panels are allowed to break full-bleed.
-- Single column on mobile, always. Hero and the Lineup Card are the only sections that go 2-column, and only at ≥1024px.
+v1's hero was correct on every individual spec (right copy, right button, right stat panel) but the **composition** was flat: everything vertically centered in the viewport with no anchor to the edges, leaving roughly 60% of the viewport empty below the fold-line content. Fix this with explicit rules, not vibes:
+
+**Hero section, desktop (≥1024px):**
+- Full viewport height (`min-height: 100svh`), not auto-height content floating in a taller empty container
+- Left column (copy + CTA): vertically centered within the hero, **left-aligned to the page's max-width container edge**, not centered in its own column — text blocks that hug a hard left edge read more confident than centered-in-a-box text
+- Right column (stat panel): vertically centered, but **offset visually** — give it a subtle background treatment behind it (a faint radial glow in Clay Red at ~8% opacity, or a thin grid/scoreboard-line texture at ~4% opacity) so it doesn't read as a card floating in pure black. This is the fix for "stat panel looks like it's lost in space."
+- Below the two-column row: a thin horizontal divider (Steel-300 at 15% opacity) followed by the **trust bar (Section 2)**, pulled up so it sits in the hero's viewport rather than requiring a scroll — the hero and trust bar should feel like one composed unit, not hero-then-big-gap-then-next-section.
+- Net effect: nothing in the hero viewport should be "centered with empty space around it." Every element anchors to an edge (left edge, right edge, bottom divider) or to another element.
+
+**Hero section, mobile (<1024px):**
+- Stat panel moves below the CTA, full-width, no side margins beyond the standard page gutter
+- Trust bar sits directly beneath with no extra gap — same "one composed unit" rule as desktop
+
+**General rule for every subsequent section:** before building a section, decide what it anchors to — page edge, a divider line, an adjacent section's element. "Centered in the section with padding around it" is the default to actively avoid; it's what produced the floaty feeling in v1.
+
+## Motion system (new in v2 — GSAP)
+
+This is the headline change from v1. v1 had almost no motion beyond the hero count-up; that's a real contributor to it feeling flat and unfinished, not just a missing nice-to-have.
+
+**Setup:**
+- `gsap` + `@gsap/react` (`useGSAP` hook) + `ScrollTrigger` plugin, registered once in a shared `lib/gsap.ts`
+- All animations defined inside `useGSAP()` calls scoped to a ref, with a `gsap.context()` cleanup — required for Next.js App Router to avoid animation leaks across route/component remounts
+- Every animation respects `prefers-reduced-motion: reduce` — check via `window.matchMedia` and short-circuit to setting final state instantly, no exceptions
+
+**Hero load sequence** (runs once, on mount, ~1.4s total):
+1. Eyebrow text fades up (20px → 0, opacity 0 → 1), 0.4s
+2. H1 fades up, slightly staggered word-by-word OR line-by-line (not character-by-character — that reads gimmicky), starts 0.1s after eyebrow, 0.5s
+3. Subhead + CTA fade up together, starts 0.15s after H1 finishes, 0.4s
+4. Stat panel's border-top draws in (scaleX 0 → 1, left-to-right), then the three stat numbers count up from 0 simultaneously, 900ms, ease `power2.out` — this is the v1 behavior, kept as-is, just now sequenced relative to the rest of the hero instead of running in isolation
+
+**Scroll-triggered reveals (every section after the hero):**
+- Each section's heading + intro fades up (16px → 0) as it crosses ~75% of the viewport height, using `ScrollTrigger` with `start: "top 75%"`, `toggleActions: "play none none none"` (plays once, doesn't reverse on scroll-up — reversing reads jittery on a page people scroll quickly on mobile)
+- Lineup Card rows: stagger in sequentially, 0.08s apart, as the whole card crosses into view — this reinforces the "batting order" concept, since they visually arrive in order 1 through 5
+- Program/package cards: fade up with a very slight stagger (0.06s), no rotation or scale tricks
+- Numbers anywhere outside the hero (trust bar stats, package prices once added) get the same count-up treatment as the hero stat panel, triggered on scroll-into-view rather than on page load
+
+**Sticky mobile CTA bar:**
+- Slides up from `translateY(100%)` to `translateY(0)` once the hero's bottom edge scrolls past the viewport top — use `ScrollTrigger` with `start: "bottom top"` on the hero, not a manual scroll-position listener
+- No bounce easing here — `power1.out`, fast (0.25s), this is a utility element, not a moment
+
+**What NOT to do (boundaries, not suggestions):**
+- No parallax background layers
+- No scroll-jacking / hijacked scroll speed
+- No infinite/looping ambient animation anywhere (no floating particles, no pulsing glows that never stop) — motion has a start and an end, always
+- No animation on hover for anything except the CTA button's existing color-darken (still no scale/bounce per v1 rule)
+- Total: at most **one** new "moment" beyond what's listed above. If you think a section needs something not specified here, note it as a proposal in `HANDOVER.md` rather than adding it — don't free-style new GSAP timelines into sections without a spec.
 
 ## Components
 
-**Primary CTA button**
-- Clay Red background, Chalk White text, Big Shoulders semi-bold, padding 16px/32px
-- 6px corner radius — not a pill. A pill reads as generic SaaS; a slightly-rounded rectangle reads closer to athletic equipment / structured gear.
-- One hover state: background darkens ~8%. No scale or bounce — confident, not bouncy.
-- Literal label everywhere: **"Book My Free Evaluation"**
+**Primary CTA button** — unchanged from v1: Clay Red, Chalk White text, Big Shoulders semi-bold, 16px/32px padding, 6px radius, single hover state (darken ~8%, no scale), label always "Book My Free Evaluation."
 
-**Lineup card** *(signature component — see Design thesis above)*
-- Vertical stack. Each row: a large mono "batting order" number (1–5) in Scoreboard Amber on the left, a position-style eyebrow label (e.g. "LEAD-OFF") in Steel-300 above the row headline, then a 1-line description.
-- Steel-700 card background, single 1px hairline divider between rows (Steel-300 at ~20% opacity). No per-row shadows — the whole stack reads as one card, not five.
+**Lineup card** — unchanged from v1 spec, see Design thesis. Add: rows animate in via the stagger rule above.
 
-**Stat readout panel** (hero + HitTrax section)
-- Steel-700 panel styled like a monitor/scoreboard: 4px Scoreboard Amber border-top, 2–3 stats in mono/amber with small Chalk-White labels beneath each
-- On load: numbers count up from 0 over ~900ms, ease-out, once only. If `prefers-reduced-motion: reduce` is set, show the final value immediately — no count-up.
+**Stat readout panel** — unchanged from v1 spec. Add: sits against the subtle background glow/texture described in Layout choreography, not floating on pure `--night-black`.
 
-**Program/package cards**
-- Steel-700 surface. Clay Red top border on the featured/recommended package only. Price set in mono/amber. One CTA per card.
+**Program/package cards** — unchanged from v1 spec. Add: fade-up stagger per Motion system above.
 
-## Motion rules
-- **One** orchestrated motion moment: the hero stat count-up on page load. That's the entire "wow" budget — don't spend it twice.
-- Scroll-triggered reveals: simple fade-up (12px translate, 400ms), lightly staggered for the Lineup Card rows. No parallax, no rotation, no scroll-jacking.
-- Everything respects `prefers-reduced-motion: reduce` — instant/no animation fallback, not optional.
-- No autoplaying video with sound, ever. If a hero video replaces the stat panel in a future iteration, it's muted by default with a visible, user-controlled play/pause state.
+## Spacing & layout (unchanged from v1, still correct)
+- 8px base unit. Section vertical padding: 96px desktop / 56px mobile.
+- Max content width: 1180px. Hero and stat panels may break full-bleed.
+- Single column on mobile always.
 
-## Accessibility floor (non-negotiable, not aspirational)
-- Verify contrast: Chalk White on Night Black and Chalk White on Clay Red both need to clear WCAG AA at body text size. Scoreboard Amber on Steel-700 can fail AA at small sizes — that's exactly why amber is restricted to large stat numbers, not body text.
-- Visible keyboard focus ring on every interactive element: 2px Clay Red outline, 2px offset.
-- Real `<label>` elements on every form field — placeholder text is never a substitute for a label.
-- Minimum tap target 44px on mobile, no exceptions for "but it looks cleaner small."
+## Accessibility floor (unchanged, still non-negotiable)
+- WCAG AA contrast for Chalk White on Night Black / Clay Red. Scoreboard Amber restricted to large stat numbers, never body text.
+- Visible 2px Clay Red keyboard focus ring, 2px offset, on every interactive element.
+- Real `<label>` elements on all form fields.
+- 44px minimum tap targets on mobile.
+- **v2 addition:** every GSAP animation has a `prefers-reduced-motion` fallback that is tested, not assumed — verify in dev tools by toggling the OS-level reduced-motion setting, not just by reading the code.
