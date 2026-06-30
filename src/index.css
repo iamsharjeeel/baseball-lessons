@@ -10,10 +10,15 @@
     html {
       scroll-behavior: auto;
     }
+
+    * {
+      transition-duration: 0.001ms !important;
+      animation-duration: 0.001ms !important;
+    }
   }
 
   body {
-    @apply m-0 bg-night-black font-body text-chalk-white antialiased;
+    @apply m-0 bg-paper-white font-body text-night-black antialiased;
     font-size: 1rem;
     line-height: 1.6;
   }

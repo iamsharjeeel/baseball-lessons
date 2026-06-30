@@ -1,6 +1,11 @@
 @theme {
   --color-night-black: #0b0e11;
   --color-chalk-white: #f5f3ec;
+  /* v4: white-dominant background for sections 1-6 per DESIGN_SYSTEM.md
+     "Background strategy" — distinct from --color-chalk-white, which is
+     reserved for text-on-dark. This is a background neutral, not a new
+     accent, so it doesn't touch the single-accent-color rule. */
+  --color-paper-white: #fafaf8;
   --color-clay-red: #c9462c;
   --color-turf-green: #2c6b4f;
   --color-scoreboard-amber: #e8a23d;

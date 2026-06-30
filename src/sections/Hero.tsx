@@ -1,5 +1,7 @@
 import { PrimaryButton } from '../components/PrimaryButton'
 import { StatReadoutPanel } from '../components/StatReadoutPanel'
+import { Image } from '../components/Image'
+import { PhotoOverlay } from '../components/PhotoFrame'
 
 const HERO_STATS = [
   { label: 'Exit Velo', value: 78, suffix: ' MPH' },
@@ -11,10 +13,25 @@ export function Hero() {
   return (
     <section
       id="hero"
-      className="px-4 py-14 lg:px-8 lg:py-24"
+      className="relative min-h-[640px] overflow-hidden px-4 py-16 lg:min-h-[760px] lg:px-8 lg:py-[120px]"
       aria-labelledby="hero-heading"
     >
-      <div className="mx-auto grid max-w-[var(--max-width-content)] items-center gap-10 lg:grid-cols-2 lg:gap-16">
+      {/* v4 fix #5: real hero photography, eager/priority-loaded since this is the LCP element. */}
+      <div className="absolute inset-0">
+        <Image
+          src="/images/hero"
+          widths={[768, 1280, 1920]}
+          width={1920}
+          height={1080}
+          alt="A young baseball player mid-swing at NSEC's indoor batting cage"
+          priority
+          sizes="100vw"
+          className="h-full w-full object-cover"
+        />
+        <PhotoOverlay />
+      </div>
+
+      <div className="relative z-10 mx-auto grid max-w-[var(--max-width-content)] items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="text-center lg:text-left">
           <p className="mb-4 font-body text-sm uppercase tracking-widest text-steel-300">
             Newtown, PA · Ages 6–College
