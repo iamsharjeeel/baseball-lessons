@@ -1,114 +1,108 @@
-# Design System — NSEC Landing Page (v2)
+# Design System — NSEC Landing Page (v3)
 
-## What changed in v2 and why
-The v1 build (PR #1) implemented the tokens correctly but the page still read flat — centered hero text floating in empty space, no scale contrast, no motion, awkward dead space below the fold. That's not a token problem, it's a **layout choreography and motion** problem. v2 keeps the v1 color/type system (it was right) and adds two things that were missing: explicit spatial/scale rules per section, and a real motion system (GSAP). Stack also moves from Vite to **Next.js App Router** for native Vercel support.
+## What changed in v3 and why
+v2's spec (Next.js + GSAP, layout choreography, motion system) was directionally right but Cursor's build came out hideous against the two references reviewed: a prior NSEC-style page (real photography, confident gold/black contrast) and a B2B SaaS reference (Xovera — oversized type, huge negative space, numbers given real visual weight, light section breaking up dark). v2's actual build also shipped with real bugs: a cropped Lineup Card and stranded counter numbers floating with no layout home.
 
-If you only read one thing in this file, read **"Layout choreography"** below — that's what was actually missing, not the colors.
+v3 fixes three things specifically:
+1. **No photography anywhere.** A baseball/softball lessons page with zero photos of athletes is the single biggest gap vs. the references. v3 adds a photography layer with an AI-placeholder generation spec (swap for real NSEC photos later).
+2. **Five competing accent colors → one.** Clay Red, Turf Green, and Scoreboard Amber all doing different jobs is what made v1/v2 read like a token sheet instead of a designed page. v3 cuts to a single accent.
+3. **Background flips to white-dominant, with one dark section for contrast** — not the all-black approach v1/v2 used. This is a direct, deliberate response to the Xovera reference, where the white sections carry most of the page and a black section is used once, as a beat, not as the default canvas.
 
-## Design thesis (unchanged from v1)
-NSEC's differentiator is real-time coaching data (HitTrax) delivered entirely 1-on-1 — not "we teach baseball." The page should feel like the facility at night with the lights on and the scoreboard live.
+If you're an agent picking this up fresh: **ignore the v1/v2 hero screenshots entirely, they are the failure case, not a reference.** Build from this file and the photography spec below.
 
-**Signature element — "The Lineup Card."** The customer journey (Evaluation → Plan → 1-on-1 Coaching → Data Tracking → Game-Ready) is styled as a literal batting order. Used once, in the "How It Works" section only.
+## Design thesis (still true, restated)
+NSEC's differentiator is real-time coaching data (HitTrax) delivered entirely 1-on-1. That's still the core idea. What v3 changes is *how confidently* the page says it — bigger type, real photography of athletes actually training, one color doing all the accent work instead of three fighting for attention, and a layout with the courage to leave space empty instead of filling it with bordered cards.
 
-**Hero treatment.** A live-feeling HitTrax-style stat readout (exit velocity, launch angle, distance) is the hero's visual anchor — NSEC's real technology differentiator, not a stock photo.
+**Signature element — "The Lineup Card."** Unchanged concept (the 5-step journey as a literal batting order), but rebuilt as a full-bleed, generously-spaced section — not a small bordered card with five cramped rows. Give each step room. This was the section that visibly broke (cropped) in the last build; rebuilding it bigger and simpler also makes it less likely to break.
 
-## Stack
-- **Next.js 15, App Router**, TypeScript, Tailwind v4
-- **GSAP + `@gsap/react`'s `useGSAP` hook** for all motion (scroll triggers via `ScrollTrigger` plugin)
-- No Three.js, no WebGL — motion budget is GSAP-only. See "Motion system" below; it's louder than v1's was, but still disciplined.
-- Deployed to Vercel using the **Next.js** framework preset (not the Vite preset used in PR #1 — this is a different preset in Vercel project settings if reconfiguring the same project)
+**Hero treatment.** A full-bleed photograph (real or AI-placeholder, see below) of an athlete mid-swing or mid-throw, with the headline and CTA composited over it — directly modeled on the NSEC reference page's hero, not the HitTrax-stat-panel-only approach from v1/v2. The HitTrax stat readout still exists, but moves to its own dedicated section lower on the page (where it can be the hero of that section) rather than trying to carry the page's hero on its own.
 
-## Color tokens (unchanged from v1 — these were correct)
+## Color tokens — v3: one accent, not five
 
 | Token | Hex | Use |
 |---|---|---|
-| `--night-black` | `#0B0E11` | Primary background |
-| `--chalk-white` | `#F5F3EC` | Primary text on dark, foul-line accents |
-| `--clay-red` | `#C9462C` | Primary CTA, primary accent |
-| `--turf-green` | `#2C6B4F` | Secondary accent — HitTrax section + success states only |
-| `--scoreboard-amber` | `#E8A23D` | Numbers/data only: stats, prices, countdowns |
-| `--steel-700` | `#1B2027` | Card/panel surfaces |
-| `--steel-300` | `#838B94` | Muted text, hairline dividers |
+| `--paper-white` | `#FAFAF8` | Primary background — most of the page lives here now, not black |
+| `--ink-black` | `#0B0E11` | Text on white sections; also the background of the one dark contrast section |
+| `--accent` | `#C9462C` (clay red — kept from v1/v2, it tested fine, the problem was never this color) | The **only** accent color on the page: every CTA, every stat number, every highlighted word, every featured-card border. One job, one color, everywhere. |
+| `--steel-300` | `#838B94` | Muted/secondary text, hairline dividers, on both light and dark backgrounds |
+| `--steel-700` | `#1B2027` | Card surfaces *only inside the dark section* — don't use this on the white sections |
 
-Rules unchanged: Clay Red is the only CTA color, Scoreboard Amber touches numbers only, Turf Green stays small-footprint.
+**What got removed and why:** Turf Green and Scoreboard Amber are gone. Every job they were doing (data callouts, success states, secondary accents) now goes to `--accent`. A single accent color used everywhere is what makes a page feel like one decision instead of three — this is the single highest-leverage change in v3.
 
-## Typography (unchanged from v1)
+**Rules:**
+- `--accent` appears on: primary CTA buttons, the big stat numbers, the Lineup Card's batting-order numbers, the featured pricing card's top border, and highlighted words within headlines (the "CHAMPION." gold-highlight treatment from the NSEC reference — do this with `--accent` as a highlight block behind key words in the H1, see Typography below).
+- Don't introduce a second accent for "just this one thing." If something needs visual emphasis, it gets `--accent`, oversized type, or more whitespace around it — not a new color.
+
+## Background strategy — white-dominant, one dark section
+
+This is a structural change from v1/v2, modeled directly on the Xovera reference:
+
+- **Sections 1–6** (Hero through Programs): `--paper-white` background, `--ink-black` text. The hero is the one exception — its background is the full-bleed photo, not white, with a dark gradient overlay (bottom-to-top, `--ink-black` at 70% opacity at the bottom fading to 0% at ~60% up the image) so white headline text stays readable over the photo.
+- **Section 7 (Social proof / testimonials) and Section 9 (Final CTA)**: `--ink-black` background, `--paper-white` text, `--accent` for the CTA button and any stat numbers. This is the one dark beat in the page — modeled on Xovera's dark stat band — and it should feel like a deliberate gear-change, not a random section that happens to be dark.
+- Everything else (Trust bar, Lineup, Coaches, HitTrax section, FAQ) stays on white.
+
+Don't alternate light/dark section-by-section. The point of the Xovera reference is restraint: mostly light, one confident dark beat, done.
+
+## Typography — bigger, fewer sizes, more contrast
 
 | Role | Typeface | Notes |
 |---|---|---|
-| Display | Big Shoulders (fallback Archivo Expanded) | Headlines only, never body |
-| Body | Inter or Public Sans | All paragraph copy and UI labels |
-| Data/stats | JetBrains Mono or IBM Plex Mono, tabular-nums | Numbers only |
+| Display (headlines) | Big Shoulders (fallback Archivo Expanded) | Unchanged choice, but see scale rule below — it was undersized in v1/v2 |
+| Body | Inter or Public Sans | Unchanged |
+| Data/stats | JetBrains Mono or IBM Plex Mono, tabular-nums | Unchanged role, but now always rendered in `--accent`, never amber |
 
-**v2 addition — scale contrast rule:** v1's hero H1 (`clamp(2.25rem, 5vw, 4rem)`) was too conservative relative to the empty space around it. At desktop widths ≥1280px, the hero H1 should hit the **top of its clamp range** (4rem / 64px) by default, not scale down to fill available width gracefully — oversized, slightly-too-big-for-comfort headlines are what make a hero feel confident instead of polite. Keep the clamp() for responsiveness, but don't let the implementation undershoot it on desktop.
+**v3 scale rule — go bigger than feels comfortable:**
+- Hero H1: `clamp(3rem, 8vw, 6.5rem)` — this is roughly 60% larger than v2's spec. Reference point: the Xovera "booked. 4 weeks." headline and the NSEC reference's "TRAIN LIKE A CHAMPION" both fill most of the hero's horizontal space at desktop width. Match that scale, don't undershoot it.
+- Big stat numbers (HitTrax readout, trust bar, final CTA section): `clamp(3.5rem, 9vw, 7rem)` — these should be the single loudest visual element wherever they appear, matching how "251" and "66" dominate the Xovera stat band. Bigger than the headlines around them, not smaller.
+- H2 (section headers): `clamp(2.25rem, 5vw, 4rem)`
+- Body copy stays modest by comparison — `1rem`–`1.125rem`. The contrast between huge display type and restrained body text is what makes the big type read as confident rather than just "everything is loud."
 
-## Layout choreography — read this section carefully, this is what v1 got wrong
+**Highlighted-word treatment** (for the hero H1, modeled on the NSEC reference's gold-block-behind-text on "CHAMPION" and "ATHLETE"): wrap the key word(s) in a `--accent` background block with `--paper-white` (or `--ink-black`, whichever has contrast against the photo) text inside it, slight padding, no border-radius — a hard rectangle, not a pill. Use this once per headline, on the single most important word, not on every line.
 
-v1's hero was correct on every individual spec (right copy, right button, right stat panel) but the **composition** was flat: everything vertically centered in the viewport with no anchor to the edges, leaving roughly 60% of the viewport empty below the fold-line content. Fix this with explicit rules, not vibes:
+## Photography — new in v3
 
-**Hero section, desktop (≥1024px):**
-- Full viewport height (`min-height: 100svh`), not auto-height content floating in a taller empty container
-- Left column (copy + CTA): vertically centered within the hero, **left-aligned to the page's max-width container edge**, not centered in its own column — text blocks that hug a hard left edge read more confident than centered-in-a-box text
-- Right column (stat panel): vertically centered, but **offset visually** — give it a subtle background treatment behind it (a faint radial glow in Clay Red at ~8% opacity, or a thin grid/scoreboard-line texture at ~4% opacity) so it doesn't read as a card floating in pure black. This is the fix for "stat panel looks like it's lost in space."
-- Below the two-column row: a thin horizontal divider (Steel-300 at 15% opacity) followed by the **trust bar (Section 2)**, pulled up so it sits in the hero's viewport rather than requiring a scroll — the hero and trust bar should feel like one composed unit, not hero-then-big-gap-then-next-section.
-- Net effect: nothing in the hero viewport should be "centered with empty space around it." Every element anchors to an edge (left edge, right edge, bottom divider) or to another element.
+**This is the change that matters most.** A page selling in-person athletic coaching with zero photos of athletes is the core problem with everything built so far.
 
-**Hero section, mobile (<1024px):**
-- Stat panel moves below the CTA, full-width, no side margins beyond the standard page gutter
-- Trust bar sits directly beneath with no extra gap — same "one composed unit" rule as desktop
+**Placement (minimum, build all of these):**
+1. Hero: full-bleed photo, athlete mid-action (swing, throw, or catch), shot low-angle if possible for drama, similar framing to the NSEC reference's boxing hero shot
+2. Coaches section: one photo of a coach actively instructing (hands-on, mid-correction, not posed-and-smiling)
+3. "Why train at NSEC" / facility credibility section: one wide photo of the actual training space/cage/field
+4. Optional: a small circular coach headshot next to a "Led by [name]" credibility line, matching the NSEC reference's "LED BY UFC/BELLATOR LEGEND" treatment, if a flagship coach name is confirmed by David
 
-**General rule for every subsequent section:** before building a section, decide what it anchors to — page edge, a divider line, an adjacent section's element. "Centered in the section with padding around it" is the default to actively avoid; it's what produced the floaty feeling in v1.
+**AI placeholder generation spec** (use these as literal prompts wherever the build tool generates placeholder imagery, until real NSEC photography is supplied):
+- Style: photojournalistic sports photography, natural or stadium lighting, shallow depth of field, slightly desaturated/cool color grade — not bright, not stock-photo-smiling
+- Hero shot prompt direction: "A young baseball player mid-swing at an indoor batting cage, dramatic side lighting, motion blur on the bat, shot from a low angle, photojournalistic style, desaturated color grade"
+- Coach shot prompt direction: "A baseball coach in his 30s-40s giving hands-on instruction to a teenage athlete on batting stance, indoor training facility, natural light, candid not posed, photojournalistic style"
+- Facility shot prompt direction: "Wide shot of an indoor baseball and softball training facility with batting cages and turf, empty or with one athlete training in the distance, moody stadium-style lighting"
+- Every placeholder image gets a `data-placeholder="true"` attribute (or equivalent) in the markup so a future find-and-replace pass can locate every spot needing a real photo swap — this matters, don't skip it.
+- Crop/treatment: every hero/section photo gets the same gradient-overlay treatment described in "Background strategy" above, so text stays legible regardless of the specific image's brightness.
 
-## Motion system (new in v2 — GSAP)
+## Layout — fewer, bigger, more spacious (the Xovera lesson)
 
-This is the headline change from v1. v1 had almost no motion beyond the hero count-up; that's a real contributor to it feeling flat and unfinished, not just a missing nice-to-have.
+- **Cut the bordered-card-everywhere pattern.** v1/v2 put almost everything in a `--steel-700` bordered box. In v3, only use a card surface where there's genuinely grouped, comparable data (the Programs/pricing cards, the dark-section testimonial card). Everything else — Lineup steps, FAQ, Coaches — sits directly on the page background with spacing doing the separation work, not borders.
+- **Lineup Card rebuild:** full content-width (up to the 1180px max-width), each of the 5 steps gets its own full-width row with generous vertical padding (minimum 48px between rows), the batting-order number rendered at the new oversized stat scale (`clamp(3.5rem, 9vw, 7rem)`) to its own column on the left, headline + description in a wide column to the right. This is wider and roomier than v2's card — that's deliberate, it's the fix for the cropping bug and the cramped feel both at once.
+- **Whitespace rule:** between major sections, default to *more* vertical space than feels necessary, not less — 120px desktop section padding minimum (up from v2's 96px). The Xovera reference's confidence comes partly from how much room things have to breathe.
 
-**Setup:**
-- `gsap` + `@gsap/react` (`useGSAP` hook) + `ScrollTrigger` plugin, registered once in a shared `lib/gsap.ts`
-- All animations defined inside `useGSAP()` calls scoped to a ref, with a `gsap.context()` cleanup — required for Next.js App Router to avoid animation leaks across route/component remounts
-- Every animation respects `prefers-reduced-motion: reduce` — check via `window.matchMedia` and short-circuit to setting final state instantly, no exceptions
+## Components (v3 updates)
 
-**Hero load sequence** (runs once, on mount, ~1.4s total):
-1. Eyebrow text fades up (20px → 0, opacity 0 → 1), 0.4s
-2. H1 fades up, slightly staggered word-by-word OR line-by-line (not character-by-character — that reads gimmicky), starts 0.1s after eyebrow, 0.5s
-3. Subhead + CTA fade up together, starts 0.15s after H1 finishes, 0.4s
-4. Stat panel's border-top draws in (scaleX 0 → 1, left-to-right), then the three stat numbers count up from 0 simultaneously, 900ms, ease `power2.out` — this is the v1 behavior, kept as-is, just now sequenced relative to the rest of the hero instead of running in isolation
+**Primary CTA button** — same shape/behavior as before (6px radius, not pill, single hover darken), now always `--accent` background — never any other color, full stop.
 
-**Scroll-triggered reveals (every section after the hero):**
-- Each section's heading + intro fades up (16px → 0) as it crosses ~75% of the viewport height, using `ScrollTrigger` with `start: "top 75%"`, `toggleActions: "play none none none"` (plays once, doesn't reverse on scroll-up — reversing reads jittery on a page people scroll quickly on mobile)
-- Lineup Card rows: stagger in sequentially, 0.08s apart, as the whole card crosses into view — this reinforces the "batting order" concept, since they visually arrive in order 1 through 5
-- Program/package cards: fade up with a very slight stagger (0.06s), no rotation or scale tricks
-- Numbers anywhere outside the hero (trust bar stats, package prices once added) get the same count-up treatment as the hero stat panel, triggered on scroll-into-view rather than on page load
+**Lineup row** (replaces "Lineup card" — no longer a bordered card, see Layout above) — full-width row, oversized accent number on the left, content on the right, hairline `--steel-300` divider between rows only (no card border, no shadow).
 
-**Sticky mobile CTA bar:**
-- Slides up from `translateY(100%)` to `translateY(0)` once the hero's bottom edge scrolls past the viewport top — use `ScrollTrigger` with `start: "bottom top"` on the hero, not a manual scroll-position listener
-- No bounce easing here — `power1.out`, fast (0.25s), this is a utility element, not a moment
+**Stat readout** (hero photo overlay version + dedicated HitTrax section version) — numbers at the new oversized scale, always `--accent`, label beneath in small `--paper-white` or `--ink-black` (whichever has contrast against that section's background) uppercase caps.
 
-**What NOT to do (boundaries, not suggestions):**
-- No parallax background layers
-- No scroll-jacking / hijacked scroll speed
-- No infinite/looping ambient animation anywhere (no floating particles, no pulsing glows that never stop) — motion has a start and an end, always
-- No animation on hover for anything except the CTA button's existing color-darken (still no scale/bounce per v1 rule)
-- Total: at most **one** new "moment" beyond what's listed above. If you think a section needs something not specified here, note it as a proposal in `HANDOVER.md` rather than adding it — don't free-style new GSAP timelines into sections without a spec.
+**Program/package cards** — only component that keeps a visible card surface, since these are genuinely comparable side-by-side options. Featured card gets a `--accent` top border, 4px.
 
-## Components
+**Dark-section testimonial card** — modeled on the Xovera reference's white card-on-dark testimonial: `--paper-white` card surface sitting on the `--ink-black` section background (i.e., inverted from the rest of the page), quote text in `--ink-black`, small `--accent` circular avatar initial.
 
-**Primary CTA button** — unchanged from v1: Clay Red, Chalk White text, Big Shoulders semi-bold, 16px/32px padding, 6px radius, single hover state (darken ~8%, no scale), label always "Book My Free Evaluation."
-
-**Lineup card** — unchanged from v1 spec, see Design thesis. Add: rows animate in via the stagger rule above.
-
-**Stat readout panel** — unchanged from v1 spec. Add: sits against the subtle background glow/texture described in Layout choreography, not floating on pure `--night-black`.
-
-**Program/package cards** — unchanged from v1 spec. Add: fade-up stagger per Motion system above.
-
-## Spacing & layout (unchanged from v1, still correct)
-- 8px base unit. Section vertical padding: 96px desktop / 56px mobile.
-- Max content width: 1180px. Hero and stat panels may break full-bleed.
-- Single column on mobile always.
+## Motion (GSAP — mostly unchanged from v2, two additions)
+- Keep all v2 motion rules (hero load sequence, scroll-triggered fade-ups, Lineup stagger, sticky CTA slide-in, `prefers-reduced-motion` respected throughout).
+- **New:** the big stat numbers (wherever `clamp(3.5rem, 9vw, 7rem)` scale is used) always count up on scroll-into-view, not just in the hero — this is now a recurring motif across multiple sections, matching how Xovera's "251 / 66 / 88 / 16" all count up together as a unit.
+- **New:** the hero's gradient overlay can have a very subtle, one-time fade-in (overlay opacity 0 → final value, ~600ms) alongside the existing text fade-up sequence, so the photo doesn't just snap to its final darkened state. This is the only new motion moment added in v3 — don't add others.
 
 ## Accessibility floor (unchanged, still non-negotiable)
-- WCAG AA contrast for Chalk White on Night Black / Clay Red. Scoreboard Amber restricted to large stat numbers, never body text.
-- Visible 2px Clay Red keyboard focus ring, 2px offset, on every interactive element.
+- WCAG AA contrast: verify `--ink-black` on `--paper-white` (will pass easily) and `--paper-white` text over the hero photo's gradient overlay specifically — test against the darkest *and* lightest plausible placeholder image, since AI-generated photos vary in brightness.
+- Visible 2px `--accent` keyboard focus ring, 2px offset, every interactive element.
 - Real `<label>` elements on all form fields.
 - 44px minimum tap targets on mobile.
-- **v2 addition:** every GSAP animation has a `prefers-reduced-motion` fallback that is tested, not assumed — verify in dev tools by toggling the OS-level reduced-motion setting, not just by reading the code.
+- Every GSAP animation has a tested `prefers-reduced-motion` fallback.
