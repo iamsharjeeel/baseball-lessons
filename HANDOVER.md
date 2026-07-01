@@ -172,3 +172,33 @@ Per `AGENT_INSTRUCTIONS.md`'s instruction to check actual Network tab timing rat
 - The "Failed to find font override values for font `Big Shoulders`" build-time notice is expected and harmless — Big Shoulders isn't in Next's bundled fallback-metrics dataset, so it just skips a minor layout-shift optimization for the font-swap moment; the font still self-hosts and loads correctly (confirmed via the preload link in the rendered `<head>`).
 
 **Next session should start with:** A real human/design review of the v5 pass specifically (hero composition, the gradient-fill numbers, the grain texture at actual viewing distance) before calling this final — then, separately and whenever David's numbers land, resolve the pricing/trust-bar/testimonial placeholders that have been open since Session 0.
+
+## Session 6 — 2026-07-01
+**Goal this session:** Full premium athletic-editorial overhaul per Meta-ads CRO brief — single conversion form (hero inline + modal), real NSEC/HitTrax copy, no fabricated stats/testimonials/prices, GSAP motion, sticky CTA, Meta CAPI hooks.
+
+**What got done:**
+- Rebuilt entire landing page against the new conversion architecture: hero form above the fold (right on desktop, stacked on mobile), all other CTAs open the same modal form.
+- Created `EvaluationForm` (single source of truth) with fields: First/Last Name, Email, Phone, Athlete Age, interest select (Baseball/Softball/HitTrax/Team), SMS consent microcopy, submit label "Book My Free Evaluation."
+- Added `FormModalProvider` + `FormModal` + `StickyCtaBar` (desktop + mobile, appears after hero scrolls out).
+- Conversion tracking: `trackFormConversion()` fires Meta Pixel `Lead` with `eventID` for CAPI dedup; dispatches `nsec:conversion` custom DOM event with form data + UTM params for GHL CAPI listeners. Form/data attributes: `data-conversion-form`, `data-meta-event="Lead"`, `data-ghl-form="nsec-evaluation"`.
+- New/updated sections: Trust strip (text-only, no placeholder stats), ProgramsApart, Lineup (vertical accent rule + modal CTA), Coaches ("Train with the Elite"), expanded HitTrax (aligned 3-stat grid, 4 feature tiles, "Who is HitTrax for?"), OfferBlocks (no prices), CredibilityBand (real trust signals + testimonial HTML comment slot), accessible FAQ accordion (`aria-expanded`), FinalCta, Footer with full NAP + Ryan Busch contact.
+- Hero: NSEC logo from nacsportscenter.com, editorial type scale, HitTrax stat count-up panel on left, GSAP parallax on hero photo. Removed Three.js `HeroScene` from hero (GSAP parallax replaces it — smaller bundle, matches brief).
+- `npm run build` passes; `npm run lint` passes (3 fast-refresh warnings only).
+
+**Decisions made (and why):**
+- Primary conversion event fires on **form submit only** — modal-opening CTAs do not fire `Lead` (prevents inflated conversion counts).
+- "Meet the coaches" remains the one exit link to nacsportscenter.com/coaches/; all book CTAs open the evaluation form.
+- Superseded `CONTENT_SPEC.md` trust-bar placeholder stats and pricing cards per explicit user brief (no fabricated numbers, no prices ship).
+- Removed unused `Programs.tsx`, `Testimonials.tsx`, `StickyMobileCta.tsx` in favor of new components.
+
+**Waiting on client / open questions:**
+- GHL/form backend endpoint — form currently fires pixel + DOM event; needs wiring to actual lead capture.
+- `NEXT_PUBLIC_META_PIXEL_ID` env var for production pixel.
+- Real client testimonials for CredibilityBand slot.
+- Real NSEC photography to replace AI placeholders.
+
+**Known issues / not done yet:**
+- No Vercel preview deployed from this session.
+- Big Shoulders font override build notice (harmless, carried forward).
+
+**Next session should start with:** Wire form submission to GHL (or confirmed lead-capture endpoint), set `NEXT_PUBLIC_META_PIXEL_ID` in Vercel, human design review at 375/768/1440.

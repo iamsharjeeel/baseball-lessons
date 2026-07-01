@@ -1,3 +1,6 @@
+'use client'
+
+import { useState } from 'react'
 import { Section } from '../components/Section'
 import { FadeUp } from '../components/motion/FadeUp'
 
@@ -28,33 +31,56 @@ const FAQS = [
 ]
 
 export function Faq() {
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
+
   return (
     <Section id="faq" background="light" ariaLabelledby="faq-heading">
       <FadeUp>
         <h2
           id="faq-heading"
-          className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-tight tracking-tight text-ink-black"
+          className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-[0.95] tracking-[-0.02em] text-ink-black"
         >
           Frequently asked questions
         </h2>
 
-        <div className="mt-10 divide-y divide-steel-300/30 lg:mt-14">
-          {FAQS.map((faq) => (
-            <details key={faq.question} className="group py-6">
-              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-display text-lg font-semibold text-ink-black lg:text-xl">
-                {faq.question}
-                <span
-                  aria-hidden="true"
-                  className="shrink-0 font-data text-xl text-accent transition-transform group-open:rotate-45"
+        <div className="mt-10 divide-y divide-ink-black/10 lg:mt-14">
+          {FAQS.map((faq, index) => {
+            const isOpen = openIndex === index
+            const panelId = `faq-panel-${index}`
+            const buttonId = `faq-button-${index}`
+
+            return (
+              <div key={faq.question} className="py-6">
+                <h3>
+                  <button
+                    id={buttonId}
+                    type="button"
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="flex min-h-11 w-full cursor-pointer items-center justify-between gap-4 text-left font-display text-lg font-semibold text-ink-black lg:text-xl"
+                  >
+                    {faq.question}
+                    <span
+                      aria-hidden="true"
+                      className={`shrink-0 font-data text-xl text-accent transition-transform duration-200 ${isOpen ? 'rotate-45' : ''}`}
+                    >
+                      +
+                    </span>
+                  </button>
+                </h3>
+                <div
+                  id={panelId}
+                  role="region"
+                  aria-labelledby={buttonId}
+                  hidden={!isOpen}
+                  className="mt-4 max-w-2xl text-base leading-relaxed text-ink-black/70"
                 >
-                  +
-                </span>
-              </summary>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-ink-black/70">
-                {faq.answer}
-              </p>
-            </details>
-          ))}
+                  {faq.answer}
+                </div>
+              </div>
+            )
+          })}
         </div>
       </FadeUp>
     </Section>

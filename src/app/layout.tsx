@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from 'next'
 import { Big_Shoulders, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { AnalyticsInit } from '../components/AnalyticsInit'
-import { StickyMobileCta } from '../sections/StickyMobileCta'
+import { FormModal } from '../components/FormModal'
+import { FormModalProvider } from '../context/FormModalContext'
+import { StickyCtaBar } from '../sections/StickyCtaBar'
 
 const bigShoulders = Big_Shoulders({
   subsets: ['latin'],
@@ -13,7 +15,7 @@ const bigShoulders = Big_Shoulders({
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600'],
   variable: '--font-inter',
   display: 'swap',
 })
@@ -48,8 +50,11 @@ export default function RootLayout({
       className={`${bigShoulders.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        {children}
-        <StickyMobileCta />
+        <FormModalProvider>
+          {children}
+          <FormModal />
+          <StickyCtaBar />
+        </FormModalProvider>
         <AnalyticsInit />
       </body>
     </html>

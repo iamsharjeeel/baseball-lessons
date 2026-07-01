@@ -44,6 +44,11 @@ export function initMetaPixel(): void {
   window.fbq?.('track', 'PageView')
 }
 
-export function trackLead(): void {
+/** Pass eventId for Conversions API deduplication when GHL CAPI is wired. */
+export function trackLead(eventId?: string): void {
+  if (eventId) {
+    window.fbq?.('track', 'Lead', {}, { eventID: eventId })
+    return
+  }
   window.fbq?.('track', 'Lead')
 }
