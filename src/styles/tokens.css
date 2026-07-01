@@ -1,20 +1,26 @@
 @theme {
-  --color-night-black: #0b0e11;
-  --color-chalk-white: #f5f3ec;
-  /* v4: white-dominant background for sections 1-6 per DESIGN_SYSTEM.md
-     "Background strategy" — distinct from --color-chalk-white, which is
-     reserved for text-on-dark. This is a background neutral, not a new
-     accent, so it doesn't touch the single-accent-color rule. */
-  --color-paper-white: #fafaf8;
-  --color-clay-red: #c9462c;
-  --color-turf-green: #2c6b4f;
-  --color-scoreboard-amber: #e8a23d;
+  /* v5: warmer near-black and warmer off-white — true #000/flat neutrals
+     read cheap at this brightness range, a hair of warmth reads expensive.
+     paper-white doubles as the "text on dark" color (matching how
+     DESIGN_SYSTEM.md's v3 palette was always specified — a prior session
+     had introduced a separate chalk-white token for this job that isn't
+     part of the documented palette; consolidated back to one white). */
+  --color-ink-black: #0a0b0d;
+  --color-paper-white: #faf8f4;
+
+  /* v5: --accent kept as the interactive/small-element register; --accent-deep
+     is the same color's large-surface register (section borders, backgrounds);
+     --accent-tint is a 6%-opacity background wash only, never text/borders. */
+  --color-accent: #c9462c;
+  --color-accent-deep: #9b3520;
+  --color-accent-tint: rgb(201 70 44 / 0.06);
+
   --color-steel-700: #1b2027;
   --color-steel-300: #838b94;
 
-  --font-display: 'Big Shoulders', ui-sans-serif, system-ui, sans-serif;
-  --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-data: 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: var(--font-big-shoulders), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-data: var(--font-jetbrains-mono), ui-monospace, monospace;
 
   --max-width-content: 1180px;
 }

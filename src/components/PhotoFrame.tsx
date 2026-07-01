@@ -1,33 +1,28 @@
 import type { ReactNode } from 'react'
 
 /**
- * v4 fix #4 — one gradient-overlay treatment, applied identically to
- * every photo on the page (hero, coach, facility) so none of them reads
- * as "untreated" next to the others.
+ * One gradient-overlay treatment, applied identically to every photo on the
+ * page (hero, coach, facility) so none of them reads as "untreated" next to
+ * the others. Two stacked layers: a flat 40% black tint (measured contrast
+ * fix — the gradient alone fails WCAG AA where it hits 0% opacity ~60% up
+ * the image) plus the bottom-to-top gradient from DESIGN_SYSTEM.md.
  *
- * Two stacked layers:
- * 1. A flat 40% black tint across the whole photo. This is the part that
- *    deviates from a literal read of `DESIGN_SYSTEM.md` v3 (which only
- *    specifies the bottom-up gradient below) — measured contrast against
- *    the actual generated hero placeholder showed the top of the photo,
- *    where the eyebrow text sits, fails WCAG AA (~3.5:1) for `steel-300`
- *    with the gradient alone, since the gradient hits 0% opacity ~60% up.
- *    A uniform 40% tint brings that to ~4.7:1 while keeping the gradient's
- *    extra bottom-heavy darkening for headline legibility. Applied to all
- *    three photos identically, so the treatment is still one rule, not a
- *    hero-only patch.
- * 2. The bottom-to-top gradient specified in `DESIGN_SYSTEM.md`: ink-black
- *    at 70% opacity at the bottom, fading to 0% ~60% up the image.
+ * v5 adds a third, optional warm layer (`warm`) for the hero only — mixes
+ * `--accent-deep` in at low opacity at the very bottom edge, tying the
+ * photo treatment to the accent system instead of a purely neutral fade.
  */
-export const PHOTO_TINT_CLASS = 'pointer-events-none absolute inset-0 bg-night-black/40'
+export const PHOTO_TINT_CLASS = 'pointer-events-none absolute inset-0 bg-ink-black/40'
 export const PHOTO_GRADIENT_CLASS =
-  'pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(11,14,17,0.70)_0%,rgba(11,14,17,0)_60%)]'
+  'pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(10,11,13,0.70)_0%,rgba(10,11,13,0)_60%)]'
+export const PHOTO_WARM_EDGE_CLASS =
+  'pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(155,53,32,0.35)_0%,rgba(155,53,32,0)_18%)]'
 
-export function PhotoOverlay() {
+export function PhotoOverlay({ warm = false }: { warm?: boolean }) {
   return (
     <>
       <div aria-hidden="true" className={PHOTO_TINT_CLASS} />
       <div aria-hidden="true" className={PHOTO_GRADIENT_CLASS} />
+      {warm && <div aria-hidden="true" className={PHOTO_WARM_EDGE_CLASS} />}
     </>
   )
 }

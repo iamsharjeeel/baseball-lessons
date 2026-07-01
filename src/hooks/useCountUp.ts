@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useReducedMotion } from './useReducedMotion'
+import { useReducedMotion } from '../lib/useReducedMotion'
 
 export function useCountUp(
   target: number,

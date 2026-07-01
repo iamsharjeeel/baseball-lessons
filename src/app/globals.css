@@ -1,0 +1,55 @@
+@import 'tailwindcss';
+@import '../styles/tokens.css';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    * {
+      transition-duration: 0.001ms !important;
+      animation-duration: 0.001ms !important;
+    }
+  }
+
+  body {
+    @apply m-0 bg-paper-white font-body text-ink-black antialiased;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-accent;
+  }
+}
+
+@layer components {
+  /* v5 material pass: cheap tiled-noise overlay for dark sections only
+     (testimonials, final CTA) — makes a flat --ink-black read as a
+     designed surface instead of a CSS default. ~2.5% opacity, applied via
+     a tiny inline SVG turbulence filter baked into a data URI so there's
+     no extra network request. */
+  .grain-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.025;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* v5 material pass: big stat numbers (Lineup, HitTrax, Trust bar, hero
+     panel) get a subtle top-to-bottom gradient fill instead of a flat
+     color — accent fading toward accent-deep down the glyph. */
+  .stat-gradient-text {
+    background-image: linear-gradient(to bottom, var(--color-accent) 0%, var(--color-accent-deep) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+}

@@ -1,3 +1,5 @@
+'use client'
+
 import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from 'react'
 import { trackLead } from '../lib/metaPixel'
 
@@ -20,7 +22,7 @@ export function PrimaryButton({
   return (
     <button
       type="button"
-      className={`inline-flex min-h-11 items-center justify-center rounded-md bg-clay-red px-8 py-4 font-display text-lg font-semibold text-chalk-white transition-colors hover:bg-[#b33d26] ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-8 py-4 font-display text-lg font-semibold text-paper-white transition-colors hover:bg-accent-deep ${className}`}
       onClick={handleClick}
       {...props}
     >

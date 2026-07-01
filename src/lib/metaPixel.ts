@@ -5,7 +5,7 @@ declare global {
   }
 }
 
-const PIXEL_ID = import.meta.env.VITE_META_PIXEL_ID as string | undefined
+const PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID
 
 export function initMetaPixel(): void {
   if (!PIXEL_ID || typeof window === 'undefined') return
