@@ -1,11 +1,21 @@
 export function Footer() {
   return (
     <footer className="border-t border-ink-black/10 bg-paper-white py-10 lg:py-12">
-      <div className="mx-auto max-w-[var(--max-width-content)] px-4 text-center lg:px-8">
+      <div className="mx-auto max-w-[var(--max-width-content)] px-4 text-center lg:px-10">
         <p className="font-display text-lg font-bold text-ink-black">
           Newtown Sports &amp; Events Center
         </p>
         <p className="mt-3 text-sm leading-relaxed text-ink-black/60">
+          <a
+            href="https://nacsportscenter.com/softball-and-baseball-lessons/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-accent"
+          >
+            https://nacsportscenter.com
+          </a>
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-ink-black/60">
           <a
             href="https://maps.google.com/?q=207+Penns+Trail,+Newtown,+PA+18940"
             className="hover:text-accent"

@@ -30,7 +30,7 @@ export function FormModal() {
       onClose={closeModal}
       className="fixed inset-0 z-[100] m-0 h-full max-h-none w-full max-w-none border-0 bg-transparent p-4 backdrop:bg-ink-black/80 backdrop:backdrop-blur-sm open:flex open:items-center open:justify-center"
     >
-      <div className="relative w-full max-w-[520px]">
+      <div className="relative w-full max-w-[560px]">
         <button
           ref={closeButtonRef}
           type="button"

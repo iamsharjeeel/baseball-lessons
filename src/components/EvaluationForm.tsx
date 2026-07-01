@@ -121,7 +121,7 @@ export function EvaluationForm({
         </p>
       )}
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-5">
+      <div className="form-grid mt-8">
         <div className="form-field">
           <label htmlFor={`${formId}-firstName`} className="form-label">
             First Name
@@ -205,8 +205,8 @@ export function EvaluationForm({
         </div>
 
         <div className="form-field">
-          <label htmlFor={`${formId}-reachingOutAbout`} className="form-label whitespace-nowrap">
-            What are you reaching out about?
+          <label htmlFor={`${formId}-reachingOutAbout`} className="form-label">
+            I&rsquo;m interested in
           </label>
           <select
             id={`${formId}-reachingOutAbout`}

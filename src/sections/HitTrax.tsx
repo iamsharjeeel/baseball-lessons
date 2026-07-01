@@ -112,12 +112,12 @@ export function HitTrax() {
           <div
             key={feature.title}
             data-stagger-item
-            className="border-l-2 border-accent bg-accent-tint px-6 py-5"
+            className="flex h-full min-h-[140px] flex-col border-t-2 border-accent bg-accent-tint px-6 py-5"
           >
             <h4 className="font-display text-lg font-bold text-ink-black lg:text-xl">
               {feature.title}
             </h4>
-            <p className="mt-2 text-base leading-relaxed text-ink-black/75">
+            <p className="mt-2 flex-1 text-base leading-relaxed text-ink-black/75">
               {feature.description}
             </p>
           </div>

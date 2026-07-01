@@ -95,8 +95,8 @@ export function Hero() {
           />
         </div>
 
-        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_480px] lg:gap-14">
-          <div>
+        <div className="grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_540px] lg:gap-12 xl:grid-cols-[minmax(0,1fr)_560px]">
+          <div className="min-w-0">
             <p
               data-hero-item
               className="mb-4 font-body text-xs font-bold uppercase tracking-[0.22em] text-accent"

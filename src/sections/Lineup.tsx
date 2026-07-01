@@ -57,33 +57,33 @@ export function Lineup() {
         </p>
       </FadeUp>
 
-      <StaggerGroup className="mt-[var(--spacing-section-gap)]">
+      <StaggerGroup className="lineup-grid mt-[var(--spacing-section-gap)]">
         {LINEUP_STEPS.map((step, index) => (
           <div
             key={step.number}
             data-stagger-item
-            className={`grid grid-cols-[auto_1fr] items-start gap-5 py-5 lg:grid-cols-[120px_1fr] lg:gap-10 lg:py-6 ${
-              index !== 0 ? 'border-t border-ink-black/8' : ''
+            className={`lineup-step flex min-w-0 flex-col ${
+              index < LINEUP_STEPS.length - 1 ? 'lineup-step--connected' : ''
             }`}
           >
-            <div>
-              <p className="stat-gradient-text font-data text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-none tabular-nums">
+            <div className="lineup-step__numeral">
+              <p className="stat-gradient-text font-data text-[clamp(2.25rem,5vw,3.25rem)] font-bold leading-none tabular-nums lg:text-[clamp(2.5rem,3.5vw,3.5rem)]">
                 <CountUpNumber value={step.number} trigger="inview" duration={600} />
               </p>
-              {'tag' in step && step.tag && (
-                <p className="mt-0.5 font-body text-[0.65rem] font-bold uppercase tracking-[0.18em] text-accent lg:text-xs">
-                  {step.tag}
-                </p>
-              )}
+              <div className="mt-1 min-h-[1.125rem]">
+                {'tag' in step && step.tag ? (
+                  <p className="font-body text-[0.65rem] font-bold uppercase tracking-[0.18em] text-accent lg:text-xs">
+                    {step.tag}
+                  </p>
+                ) : null}
+              </div>
             </div>
-            <div className="pt-1 lg:pt-2">
-              <h3 className="font-display text-xl font-bold tracking-tight text-ink-black lg:text-2xl">
-                {step.title}
-              </h3>
-              <p className="mt-2 max-w-2xl text-base leading-relaxed text-ink-black/75">
-                {step.description}
-              </p>
-            </div>
+            <h3 className="mt-4 font-display text-lg font-bold leading-tight tracking-tight text-ink-black lg:mt-5 lg:text-xl">
+              {step.title}
+            </h3>
+            <p className="lineup-step__description mt-2 text-sm leading-relaxed text-ink-black/75 lg:mt-3 lg:text-[0.9375rem]">
+              {step.description}
+            </p>
           </div>
         ))}
       </StaggerGroup>
