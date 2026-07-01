@@ -7,7 +7,7 @@ export type EvaluationFormData = {
   email: string
   phone: string
   athleteAge: string
-  interest: string
+  reachingOutAbout: string
 }
 
 /** Fires Meta Pixel Lead + dispatches a DOM event for GHL CAPI listeners. */

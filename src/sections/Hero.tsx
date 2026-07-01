@@ -83,7 +83,7 @@ export function Hero() {
         <PhotoOverlay warm />
       </div>
 
-      <div className="relative z-10 mx-auto max-w-[var(--max-width-content)] px-4 py-10 lg:px-10 lg:py-14">
+      <div className="relative z-10 mx-auto max-w-[var(--max-width-content)] px-4 pb-10 pt-10 lg:px-10 lg:pb-12 lg:pt-14">
         <div data-hero-item className="mb-8 lg:mb-10">
           <Image
             src="https://nacsportscenter.com/wp-content/uploads/2026/01/NSEC-Primary-Logo-All-White-Web.png"

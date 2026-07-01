@@ -39,13 +39,11 @@ export function HitTraxStatGrid({
         >
           {stats.map((stat) => (
             <div key={stat.label} className="min-w-0">
-              <div className="flex items-baseline justify-start gap-0.5 sm:gap-1">
+              <div className="flex items-baseline justify-start">
                 <span className="stat-gradient-text font-data text-[clamp(2.75rem,7vw,4.5rem)] font-bold leading-none tabular-nums">
                   <CountUpNumber value={stat.value} trigger={trigger} />
                 </span>
-                <span className="font-data text-base font-bold uppercase leading-none text-accent sm:text-lg lg:text-xl">
-                  {stat.unit}
-                </span>
+                <span className="stat-unit">{stat.unit}</span>
               </div>
               <p
                 className={`mt-2 font-body text-[0.65rem] font-bold uppercase leading-tight tracking-[0.14em] sm:mt-3 sm:text-xs sm:tracking-[0.15em] ${labelClass}`}

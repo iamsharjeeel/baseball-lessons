@@ -14,21 +14,18 @@ const LINEUP_STEPS = [
   },
   {
     number: 2,
-    tag: '#2',
     title: 'A Plan Built for Them',
     description:
       'Based on the evaluation, your coach builds a training plan around what your athlete actually needs to improve — not a generic curriculum.',
   },
   {
     number: 3,
-    tag: '#3',
     title: '1-on-1 Coaching',
     description:
       'Every rep is coached individually. No 10-kid group cage sessions where your athlete gets two minutes of attention.',
   },
   {
     number: 4,
-    tag: '#4',
     title: 'HitTrax Data Tracking',
     description:
       'Swings, exit velocity, launch angle — every session adds to a real performance record so progress is measurable, not just felt.',
@@ -40,7 +37,7 @@ const LINEUP_STEPS = [
     description:
       'Walk into tryouts, fall ball, or the next season with real reps and real data behind your athlete.',
   },
-]
+] as const
 
 export function Lineup() {
   return (
@@ -60,28 +57,26 @@ export function Lineup() {
         </p>
       </FadeUp>
 
-      <StaggerGroup className="relative mt-[var(--spacing-section-gap)]">
-        <div
-          aria-hidden="true"
-          className="absolute bottom-4 left-[clamp(1.25rem,3vw,2.5rem)] top-4 hidden w-px bg-accent/35 lg:block"
-        />
+      <StaggerGroup className="mt-[var(--spacing-section-gap)]">
         {LINEUP_STEPS.map((step, index) => (
           <div
             key={step.number}
             data-stagger-item
-            className={`relative grid grid-cols-[auto_1fr] items-start gap-5 py-5 lg:grid-cols-[120px_1fr] lg:gap-10 lg:py-6 ${
+            className={`grid grid-cols-[auto_1fr] items-start gap-5 py-5 lg:grid-cols-[120px_1fr] lg:gap-10 lg:py-6 ${
               index !== 0 ? 'border-t border-ink-black/8' : ''
             }`}
           >
-            <div className="relative z-10">
+            <div>
               <p className="stat-gradient-text font-data text-[clamp(2.5rem,7vw,4.5rem)] font-bold leading-none tabular-nums">
                 <CountUpNumber value={step.number} trigger="inview" duration={600} />
               </p>
-              <p className="mt-0.5 font-body text-[0.65rem] font-bold uppercase tracking-[0.18em] text-accent lg:text-xs">
-                {step.tag}
-              </p>
+              {'tag' in step && step.tag && (
+                <p className="mt-0.5 font-body text-[0.65rem] font-bold uppercase tracking-[0.18em] text-accent lg:text-xs">
+                  {step.tag}
+                </p>
+              )}
             </div>
-            <div className="border-l-2 border-accent/25 pl-5 lg:pl-8">
+            <div className="pt-1 lg:pt-2">
               <h3 className="font-display text-xl font-bold tracking-tight text-ink-black lg:text-2xl">
                 {step.title}
               </h3>

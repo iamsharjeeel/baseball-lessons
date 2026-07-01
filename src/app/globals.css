@@ -23,6 +23,15 @@
     line-height: 1.6;
   }
 
+  ::selection {
+    background: rgb(201 70 44 / 0.18);
+    color: inherit;
+  }
+
+  label {
+    user-select: none;
+  }
+
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
   }
@@ -54,6 +63,79 @@
     box-shadow:
       -12px 20px 40px rgb(0 0 0 / 0.35),
       12px 20px 40px rgb(0 0 0 / 0.35);
+  }
+
+  .form-modal-shadow {
+    box-shadow: 0 28px 72px rgb(10 11 13 / 0.28);
+  }
+
+  .form-shell {
+    @apply rounded-[10px] bg-paper-white p-7 ring-1 ring-ink-black/6 lg:p-9;
+  }
+
+  .form-field {
+    @apply min-w-0;
+  }
+
+  .form-label {
+    @apply mb-2 flex min-h-8 items-end font-body text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-ink-black/65;
+  }
+
+  .form-control {
+    @apply h-[50px] w-full appearance-none rounded-[9px] border border-[#d5cfc6] bg-[#fdfcfa] px-3.5 text-base text-ink-black shadow-none transition-[border-color,box-shadow] duration-200;
+  }
+
+  .form-control::placeholder {
+    color: var(--color-steel-300);
+  }
+
+  .form-control:hover:not(:focus) {
+    border-color: #c4bdb3;
+  }
+
+  .form-control:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(201 70 44 / 0.14);
+  }
+
+  .form-control[aria-invalid='true'] {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgb(201 70 44 / 0.12);
+  }
+
+  .form-select {
+    cursor: pointer;
+    padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%230a0b0d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 14px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+  }
+
+  .form-error {
+    @apply mt-1.5 text-xs text-accent-deep;
+  }
+
+  .form-submit {
+    @apply mt-7 flex h-[52px] w-full items-center justify-center rounded-[9px] bg-accent font-display text-lg font-semibold text-paper-white transition-all duration-200;
+  }
+
+  .form-submit:hover:not(:disabled) {
+    background-color: var(--color-accent-deep);
+    box-shadow: 0 8px 22px rgb(201 70 44 / 0.32);
+    transform: translateY(-1px);
+  }
+
+  .form-submit:disabled {
+    @apply cursor-not-allowed opacity-70;
+  }
+
+  .stat-unit {
+    @apply font-data font-bold uppercase text-accent;
+    font-size: clamp(0.875rem, 2.2vw, 1.2rem);
+    line-height: 1;
+    margin-left: 0.125rem;
   }
 
   .editorial-card {

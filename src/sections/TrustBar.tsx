@@ -17,7 +17,7 @@ export function TrustBar() {
       background="light"
       padding="compact"
       ariaLabelledby="trust-bar-heading"
-      className="border-y border-accent/20 bg-accent-tint"
+      className="border-y border-accent/20 bg-accent-tint -mt-px"
     >
       <h2 id="trust-bar-heading" className="sr-only">
         Why families choose NSEC

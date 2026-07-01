@@ -2,6 +2,8 @@
 
 import { useId, useState, type FormEvent } from 'react'
 import { trackFormConversion } from '../lib/conversion'
+import { validateEvaluationForm, type FormFieldErrors } from '../lib/formValidation'
+import { submitLeadToWebhook } from '../lib/submitLead'
 
 const INTEREST_OPTIONS = [
   { value: 'baseball', label: 'Baseball' },
@@ -16,6 +18,29 @@ type EvaluationFormProps = {
   className?: string
 }
 
+function SuccessState({
+  variant,
+  className,
+}: {
+  variant: 'inline' | 'modal'
+  className: string
+}) {
+  return (
+    <div
+      className={`form-shell text-center ${variant === 'inline' ? 'form-hero-shadow' : 'form-modal-shadow'} ${className}`}
+      role="status"
+      aria-live="polite"
+    >
+      <p className="font-display text-2xl font-bold tracking-tight text-ink-black">
+        You&rsquo;re on deck.
+      </p>
+      <p className="mt-3 text-base leading-relaxed text-ink-black/70">
+        Thanks — we&rsquo;ll reach out shortly to schedule your free evaluation.
+      </p>
+    </div>
+  )
+}
+
 export function EvaluationForm({
   variant = 'inline',
   onSuccess,
@@ -24,8 +49,9 @@ export function EvaluationForm({
   const formId = useId()
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [errors, setErrors] = useState<FormFieldErrors>({})
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (submitting) return
 
@@ -38,39 +64,39 @@ export function EvaluationForm({
       email: String(formData.get('email') ?? '').trim(),
       phone: String(formData.get('phone') ?? '').trim(),
       athleteAge: String(formData.get('athleteAge') ?? '').trim(),
-      interest: String(formData.get('interest') ?? '').trim(),
+      reachingOutAbout: String(formData.get('reachingOutAbout') ?? '').trim(),
     }
 
+    const validationErrors = validateEvaluationForm(data)
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
+      return
+    }
+
+    setErrors({})
     setSubmitting(true)
-    trackFormConversion(data)
-    setSubmitted(true)
-    setSubmitting(false)
-    onSuccess?.()
+
+    try {
+      await submitLeadToWebhook(data)
+      trackFormConversion(data)
+      form.reset()
+      setSubmitted(true)
+      onSuccess?.()
+    } catch {
+      setErrors({
+        form: 'Something went wrong. Please try again or call (267) 288-7053.',
+      })
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   if (submitted) {
-    return (
-      <div
-        className={`rounded-sm border border-accent/30 bg-paper-white p-8 text-center ${
-          variant === 'inline' ? 'form-hero-shadow' : ''
-        } ${className}`}
-        role="status"
-        aria-live="polite"
-      >
-        <p className="font-display text-2xl font-bold tracking-tight text-ink-black">
-          You&rsquo;re on deck.
-        </p>
-        <p className="mt-3 text-base leading-relaxed text-ink-black/70">
-          Thanks — we&rsquo;ll reach out shortly to schedule your free evaluation.
-        </p>
-      </div>
-    )
+    return <SuccessState variant={variant} className={className} />
   }
 
   const isModal = variant === 'modal'
-  const shadowClass = isModal
-    ? 'shadow-[0_24px_64px_rgba(10,11,13,0.18)]'
-    : 'form-hero-shadow'
+  const shadowClass = isModal ? 'form-modal-shadow' : 'form-hero-shadow'
 
   return (
     <form
@@ -79,19 +105,25 @@ export function EvaluationForm({
       data-meta-event="Lead"
       data-ghl-form="nsec-evaluation"
       onSubmit={handleSubmit}
-      className={`rounded-sm bg-paper-white p-7 ring-1 ring-ink-black/8 lg:p-9 ${shadowClass} ${className}`}
+      className={`form-shell ${shadowClass} ${className}`}
       noValidate
     >
       <p className="font-display text-xl font-bold tracking-tight text-ink-black lg:text-2xl">
         Book Your Free Evaluation
       </p>
-      <p className="mt-2 text-sm leading-relaxed text-ink-black/60">
+      <p className="mt-2.5 text-sm leading-relaxed text-ink-black/60">
         No cost. No equipment needed. 30 minutes with a real coach.
       </p>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
-        <div>
-          <label htmlFor={`${formId}-firstName`} className="mb-1.5 block text-sm font-medium text-ink-black">
+      {errors.form && (
+        <p className="mt-4 rounded-[9px] border border-accent/30 bg-accent-tint px-4 py-3 text-sm text-accent-deep" role="alert">
+          {errors.form}
+        </p>
+      )}
+
+      <div className="mt-8 grid gap-5 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-5">
+        <div className="form-field">
+          <label htmlFor={`${formId}-firstName`} className="form-label">
             First Name
           </label>
           <input
@@ -100,11 +132,14 @@ export function EvaluationForm({
             type="text"
             required
             autoComplete="given-name"
-            className="w-full min-h-11 rounded-sm border border-ink-black/15 bg-paper-white px-3 py-2.5 text-base text-ink-black placeholder:text-steel-300 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+            aria-invalid={Boolean(errors.firstName)}
+            className="form-control"
           />
+          {errors.firstName && <p className="form-error">{errors.firstName}</p>}
         </div>
-        <div>
-          <label htmlFor={`${formId}-lastName`} className="mb-1.5 block text-sm font-medium text-ink-black">
+
+        <div className="form-field">
+          <label htmlFor={`${formId}-lastName`} className="form-label">
             Last Name
           </label>
           <input
@@ -113,11 +148,14 @@ export function EvaluationForm({
             type="text"
             required
             autoComplete="family-name"
-            className="w-full min-h-11 rounded-sm border border-ink-black/15 bg-paper-white px-3 py-2.5 text-base text-ink-black placeholder:text-steel-300 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+            aria-invalid={Boolean(errors.lastName)}
+            className="form-control"
           />
+          {errors.lastName && <p className="form-error">{errors.lastName}</p>}
         </div>
-        <div>
-          <label htmlFor={`${formId}-email`} className="mb-1.5 block text-sm font-medium text-ink-black">
+
+        <div className="form-field">
+          <label htmlFor={`${formId}-email`} className="form-label">
             Email
           </label>
           <input
@@ -126,11 +164,14 @@ export function EvaluationForm({
             type="email"
             required
             autoComplete="email"
-            className="w-full min-h-11 rounded-sm border border-ink-black/15 bg-paper-white px-3 py-2.5 text-base text-ink-black placeholder:text-steel-300 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+            aria-invalid={Boolean(errors.email)}
+            className="form-control"
           />
+          {errors.email && <p className="form-error">{errors.email}</p>}
         </div>
-        <div>
-          <label htmlFor={`${formId}-phone`} className="mb-1.5 block text-sm font-medium text-ink-black">
+
+        <div className="form-field">
+          <label htmlFor={`${formId}-phone`} className="form-label">
             Phone
           </label>
           <input
@@ -139,11 +180,14 @@ export function EvaluationForm({
             type="tel"
             required
             autoComplete="tel"
-            className="w-full min-h-11 rounded-sm border border-ink-black/15 bg-paper-white px-3 py-2.5 text-base text-ink-black placeholder:text-steel-300 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+            aria-invalid={Boolean(errors.phone)}
+            className="form-control"
           />
+          {errors.phone && <p className="form-error">{errors.phone}</p>}
         </div>
-        <div>
-          <label htmlFor={`${formId}-athleteAge`} className="mb-1.5 block text-sm font-medium text-ink-black">
+
+        <div className="form-field">
+          <label htmlFor={`${formId}-athleteAge`} className="form-label">
             Athlete Age
           </label>
           <input
@@ -154,19 +198,23 @@ export function EvaluationForm({
             max={25}
             required
             inputMode="numeric"
-            className="w-full min-h-11 rounded-sm border border-ink-black/15 bg-paper-white px-3 py-2.5 text-base text-ink-black placeholder:text-steel-300 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+            aria-invalid={Boolean(errors.athleteAge)}
+            className="form-control"
           />
+          {errors.athleteAge && <p className="form-error">{errors.athleteAge}</p>}
         </div>
-        <div>
-          <label htmlFor={`${formId}-interest`} className="mb-1.5 block text-sm font-medium text-ink-black">
+
+        <div className="form-field">
+          <label htmlFor={`${formId}-reachingOutAbout`} className="form-label whitespace-nowrap">
             What are you reaching out about?
           </label>
           <select
-            id={`${formId}-interest`}
-            name="interest"
+            id={`${formId}-reachingOutAbout`}
+            name="reachingOutAbout"
             required
             defaultValue=""
-            className="w-full min-h-11 rounded-sm border border-ink-black/15 bg-paper-white px-3 py-2.5 text-base text-ink-black focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+            aria-invalid={Boolean(errors.reachingOutAbout)}
+            className="form-control form-select"
           >
             <option value="" disabled>
               Select one
@@ -177,6 +225,7 @@ export function EvaluationForm({
               </option>
             ))}
           </select>
+          {errors.reachingOutAbout && <p className="form-error">{errors.reachingOutAbout}</p>}
         </div>
       </div>
 
@@ -184,7 +233,7 @@ export function EvaluationForm({
         type="submit"
         disabled={submitting}
         data-cta="book-evaluation"
-        className="mt-6 flex w-full min-h-11 items-center justify-center rounded-sm bg-accent px-8 py-4 font-display text-lg font-semibold text-paper-white transition-colors hover:bg-accent-deep disabled:opacity-70"
+        className="form-submit"
       >
         {submitting ? 'Submitting…' : 'Book My Free Evaluation'}
       </button>
