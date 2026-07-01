@@ -22,5 +22,8 @@
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   --font-data: var(--font-jetbrains-mono), ui-monospace, monospace;
 
-  --max-width-content: 1180px;
+  --max-width-content: 1320px;
+  --spacing-section-y: clamp(4rem, 8vw, 7rem);
+  --spacing-section-compact: clamp(2rem, 4vw, 3rem);
+  --spacing-section-gap: clamp(2rem, 4vw, 3rem);
 }

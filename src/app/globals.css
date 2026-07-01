@@ -23,17 +23,21 @@
     line-height: 1.6;
   }
 
+  ::selection {
+    background: rgb(201 70 44 / 0.18);
+    color: inherit;
+  }
+
+  label {
+    user-select: none;
+  }
+
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-accent;
   }
 }
 
 @layer components {
-  /* v5 material pass: cheap tiled-noise overlay for dark sections only
-     (testimonials, final CTA) — makes a flat --ink-black read as a
-     designed surface instead of a CSS default. ~2.5% opacity, applied via
-     a tiny inline SVG turbulence filter baked into a data URI so there's
-     no extra network request. */
   .grain-overlay {
     position: absolute;
     inset: 0;
@@ -43,13 +47,166 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
-  /* v5 material pass: big stat numbers (Lineup, HitTrax, Trust bar, hero
-     panel) get a subtle top-to-bottom gradient fill instead of a flat
-     color — accent fading toward accent-deep down the glyph. */
   .stat-gradient-text {
     background-image: linear-gradient(to bottom, var(--color-accent) 0%, var(--color-accent-deep) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     color: transparent;
+  }
+
+  dialog::backdrop {
+    background: rgb(10 11 13 / 0.82);
+    backdrop-filter: blur(4px);
+  }
+
+  .form-hero-shadow {
+    box-shadow:
+      -12px 20px 40px rgb(0 0 0 / 0.35),
+      12px 20px 40px rgb(0 0 0 / 0.35);
+  }
+
+  .form-modal-shadow {
+    box-shadow: 0 28px 72px rgb(10 11 13 / 0.28);
+  }
+
+  .form-shell {
+    @apply min-w-0 rounded-[10px] bg-paper-white p-7 ring-1 ring-ink-black/6 lg:p-9;
+  }
+
+  .form-field {
+    @apply min-w-0;
+  }
+
+  .form-grid {
+    display: grid;
+    gap: 1.25rem;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .form-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 1.25rem;
+      row-gap: 1.25rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .form-grid {
+      column-gap: 1.25rem;
+    }
+  }
+
+  .form-label {
+    @apply mb-2 flex min-h-8 items-end font-body text-[0.6875rem] font-semibold uppercase tracking-[0.14em] text-ink-black/65;
+  }
+
+  .form-control {
+    @apply h-[50px] w-full appearance-none rounded-[9px] border border-[#d5cfc6] bg-[#fdfcfa] px-3.5 text-base text-ink-black shadow-none transition-[border-color,box-shadow] duration-200;
+  }
+
+  .form-control::placeholder {
+    color: var(--color-steel-300);
+  }
+
+  .form-control:hover:not(:focus) {
+    border-color: #c4bdb3;
+  }
+
+  .form-control:focus {
+    border-color: var(--color-accent);
+    outline: none;
+    box-shadow: 0 0 0 3px rgb(201 70 44 / 0.14);
+  }
+
+  .form-control[aria-invalid='true'] {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 2px rgb(201 70 44 / 0.12);
+  }
+
+  .form-select {
+    cursor: pointer;
+    padding-right: 2.75rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%230a0b0d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-position: right 14px center;
+    background-repeat: no-repeat;
+    background-size: 16px;
+  }
+
+  .form-error {
+    @apply mt-1.5 text-xs text-accent-deep;
+  }
+
+  .form-submit {
+    @apply mt-7 flex h-[52px] w-full items-center justify-center rounded-[9px] bg-accent font-display text-lg font-semibold text-paper-white transition-all duration-200;
+  }
+
+  .form-submit:hover:not(:disabled) {
+    background-color: var(--color-accent-deep);
+    box-shadow: 0 8px 22px rgb(201 70 44 / 0.32);
+    transform: translateY(-1px);
+  }
+
+  .form-submit:disabled {
+    @apply cursor-not-allowed opacity-70;
+  }
+
+  .stat-unit {
+    @apply font-data font-bold uppercase text-accent;
+    font-size: clamp(0.875rem, 2.2vw, 1.2rem);
+    line-height: 1;
+    margin-left: 0.125rem;
+  }
+
+  .lineup-grid {
+    display: grid;
+    gap: 2.5rem;
+    min-width: 0;
+  }
+
+  @media (min-width: 640px) {
+    .lineup-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 2rem 1.5rem;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .lineup-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 2rem 1.25rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .lineup-grid {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 1.25rem;
+    }
+  }
+
+  .lineup-step {
+    position: relative;
+  }
+
+  .lineup-step__description {
+    min-height: clamp(5.5rem, 12vw, 7.5rem);
+  }
+
+  @media (min-width: 1024px) {
+    .lineup-step--connected::after {
+      content: '';
+      position: absolute;
+      top: 1.75rem;
+      right: -0.625rem;
+      width: 1.25rem;
+      height: 1px;
+      background: rgb(201 70 44 / 0.28);
+    }
+  }
+
+  .editorial-card {
+    @apply flex h-full flex-col border-t-2 border-accent bg-paper-white p-8 ring-1 ring-ink-black/8;
+    box-shadow: 0 1px 0 rgb(201 70 44 / 0.15);
   }
 }

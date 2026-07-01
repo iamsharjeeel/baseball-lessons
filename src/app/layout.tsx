@@ -2,7 +2,9 @@ import type { Metadata, Viewport } from 'next'
 import { Big_Shoulders, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import { AnalyticsInit } from '../components/AnalyticsInit'
-import { StickyMobileCta } from '../sections/StickyMobileCta'
+import { FormModal } from '../components/FormModal'
+import { FormModalProvider } from '../context/FormModalContext'
+import { StickyCtaBar } from '../sections/StickyCtaBar'
 
 const bigShoulders = Big_Shoulders({
   subsets: ['latin'],
@@ -13,7 +15,7 @@ const bigShoulders = Big_Shoulders({
 
 const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600'],
   variable: '--font-inter',
   display: 'swap',
 })
@@ -30,7 +32,10 @@ export const metadata: Metadata = {
   description:
     '1-on-1 baseball & softball coaching for ages 6–college, powered by HitTrax data. Book a free skills evaluation at Newtown Sports and Events Center.',
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon-16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32.png', sizes: '32x32', type: 'image/png' },
+    ],
   },
 }
 
@@ -48,8 +53,11 @@ export default function RootLayout({
       className={`${bigShoulders.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        {children}
-        <StickyMobileCta />
+        <FormModalProvider>
+          {children}
+          <FormModal />
+          <StickyCtaBar />
+        </FormModalProvider>
         <AnalyticsInit />
       </body>
     </html>

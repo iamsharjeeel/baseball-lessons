@@ -1,24 +1,30 @@
 import type { ReactNode } from 'react'
 
 type SectionBackground = 'light' | 'dark'
+type SectionPadding = 'default' | 'compact'
 
 type SectionProps = {
   id: string
   background?: SectionBackground
+  padding?: SectionPadding
   ariaLabelledby?: string
   className?: string
   contentClassName?: string
   children: ReactNode
 }
 
+const PADDING_CLASS: Record<SectionPadding, string> = {
+  default: 'py-[var(--spacing-section-y)]',
+  compact: 'py-[var(--spacing-section-compact)]',
+}
+
 /**
- * Shared section shell, server component (no client JS) — outer <section>
- * is always full-bleed, inner wrapper is constrained to the 1180px
- * max-width, 120px desktop / 64px mobile padding, identical everywhere.
+ * Shared section shell — uniform vertical rhythm via spacing tokens.
  */
 export function Section({
   id,
   background = 'light',
+  padding = 'default',
   ariaLabelledby,
   className = '',
   contentClassName = '',
@@ -33,11 +39,11 @@ export function Section({
     <section
       id={id}
       aria-labelledby={ariaLabelledby}
-      className={`w-full py-16 lg:py-[120px] ${bgClass} ${className}`}
+      className={`w-full ${PADDING_CLASS[padding]} ${bgClass} ${className}`}
     >
       {background === 'dark' && <div aria-hidden="true" className="grain-overlay" />}
       <div
-        className={`relative mx-auto w-full max-w-[var(--max-width-content)] px-4 lg:px-8 ${contentClassName}`}
+        className={`relative mx-auto w-full max-w-[var(--max-width-content)] px-4 lg:px-10 ${contentClassName}`}
       >
         {children}
       </div>

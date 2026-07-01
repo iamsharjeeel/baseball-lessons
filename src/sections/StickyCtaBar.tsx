@@ -6,8 +6,8 @@ import { PrimaryButton } from '../components/PrimaryButton'
 import { gsap, ScrollTrigger, EASE } from '../lib/gsap'
 import { useReducedMotion } from '../lib/useReducedMotion'
 
-/** Persistent bottom bar, mobile only, appears once the hero is scrolled past. */
-export function StickyMobileCta() {
+/** Slim sticky CTA bar — desktop + mobile, appears once hero scrolls out. */
+export function StickyCtaBar() {
   const ref = useRef<HTMLDivElement>(null)
   const reducedMotion = useReducedMotion()
   const [visible, setVisible] = useState(false)
@@ -41,10 +41,15 @@ export function StickyMobileCta() {
   return (
     <div
       ref={ref}
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-steel-300/20 bg-ink-black p-3 lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-ink-black/20 bg-ink-black/95 backdrop-blur-sm"
       aria-hidden={!visible}
     >
-      <PrimaryButton className="w-full" tabIndex={visible ? 0 : -1} />
+      <div className="mx-auto flex max-w-[var(--max-width-content)] items-center justify-between gap-4 px-4 py-3 lg:px-8">
+        <p className="hidden font-display text-sm font-semibold uppercase tracking-wide text-paper-white lg:block">
+          Book your free evaluation
+        </p>
+        <PrimaryButton className="w-full lg:w-auto" tabIndex={visible ? 0 : -1} />
+      </div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from 'react'
-import { trackLead } from '../lib/metaPixel'
+import { useFormModal } from '../context/FormModalContext'
 
 type PrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: ReactNode
@@ -9,20 +9,22 @@ type PrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export function PrimaryButton({
   children = 'Book My Free Evaluation',
-  onClick,
   className = '',
+  onClick,
   ...props
 }: PrimaryButtonProps) {
+  const { openModal } = useFormModal()
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
-    trackLead()
-    // TODO: wire up lead capture — see HANDOVER.md
+    openModal()
     onClick?.(event)
   }
 
   return (
     <button
       type="button"
-      className={`inline-flex min-h-11 items-center justify-center rounded-md bg-accent px-8 py-4 font-display text-lg font-semibold text-paper-white transition-colors hover:bg-accent-deep ${className}`}
+      data-cta="open-evaluation-form"
+      className={`inline-flex min-h-11 items-center justify-center rounded-sm bg-accent px-8 py-4 font-display text-lg font-semibold text-paper-white transition-colors hover:bg-accent-deep ${className}`}
       onClick={handleClick}
       {...props}
     >
