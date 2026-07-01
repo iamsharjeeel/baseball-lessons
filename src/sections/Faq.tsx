@@ -36,14 +36,17 @@ export function Faq() {
   return (
     <Section id="faq" background="light" ariaLabelledby="faq-heading">
       <FadeUp>
+        <p className="font-body text-xs font-bold uppercase tracking-[0.22em] text-accent">
+          FAQ
+        </p>
         <h2
           id="faq-heading"
-          className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-[0.95] tracking-[-0.02em] text-ink-black"
+          className="mt-3 font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-[0.92] tracking-[-0.03em] text-ink-black"
         >
           Frequently asked questions
         </h2>
 
-        <div className="mt-10 divide-y divide-ink-black/10 lg:mt-14">
+        <div className="mt-[var(--spacing-section-gap)] divide-y divide-ink-black/10">
           {FAQS.map((faq, index) => {
             const isOpen = openIndex === index
             const panelId = `faq-panel-${index}`

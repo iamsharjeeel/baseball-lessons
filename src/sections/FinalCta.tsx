@@ -6,9 +6,12 @@ export function FinalCta() {
   return (
     <DarkSection id="final-cta" ariaLabelledby="final-cta-heading" contentClassName="text-center">
       <FadeUp>
+        <p className="font-body text-xs font-bold uppercase tracking-[0.22em] text-accent">
+          Ready when you are
+        </p>
         <h2
           id="final-cta-heading"
-          className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-[0.95] tracking-[-0.02em] text-paper-white"
+          className="mt-3 font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-[0.92] tracking-[-0.03em] text-paper-white"
         >
           Fall ball and tryouts are closer than they look.
         </h2>

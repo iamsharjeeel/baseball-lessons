@@ -51,7 +51,9 @@ export function EvaluationForm({
   if (submitted) {
     return (
       <div
-        className={`rounded-sm border border-accent/30 bg-paper-white p-8 text-center ${className}`}
+        className={`rounded-sm border border-accent/30 bg-paper-white p-8 text-center ${
+          variant === 'inline' ? 'form-hero-shadow' : ''
+        } ${className}`}
         role="status"
         aria-live="polite"
       >
@@ -66,6 +68,9 @@ export function EvaluationForm({
   }
 
   const isModal = variant === 'modal'
+  const shadowClass = isModal
+    ? 'shadow-[0_24px_64px_rgba(10,11,13,0.18)]'
+    : 'form-hero-shadow'
 
   return (
     <form
@@ -74,7 +79,7 @@ export function EvaluationForm({
       data-meta-event="Lead"
       data-ghl-form="nsec-evaluation"
       onSubmit={handleSubmit}
-      className={`rounded-sm bg-paper-white p-6 shadow-[0_24px_64px_rgba(10,11,13,0.18)] ring-1 ring-ink-black/8 lg:p-8 ${className}`}
+      className={`rounded-sm bg-paper-white p-7 ring-1 ring-ink-black/8 lg:p-9 ${shadowClass} ${className}`}
       noValidate
     >
       <p className="font-display text-xl font-bold tracking-tight text-ink-black lg:text-2xl">

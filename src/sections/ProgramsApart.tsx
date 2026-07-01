@@ -4,14 +4,14 @@ import { FadeUp } from '../components/motion/FadeUp'
 export function ProgramsApart() {
   return (
     <Section id="programs-apart" background="light" ariaLabelledby="programs-apart-heading">
-      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)] lg:gap-20">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
         <FadeUp>
-          <p className="font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent">
+          <p className="font-body text-xs font-bold uppercase tracking-[0.22em] text-accent">
             What sets our programs apart?
           </p>
           <h2
             id="programs-apart-heading"
-            className="mt-4 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-extrabold leading-[0.95] tracking-[-0.02em] text-ink-black"
+            className="mt-3 font-display text-[clamp(2.25rem,5vw,3.75rem)] font-extrabold leading-[0.92] tracking-[-0.03em] text-ink-black"
           >
             The region&rsquo;s most effective training — built one athlete at a time.
           </h2>

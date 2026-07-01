@@ -1,10 +1,11 @@
 import Image from 'next/image'
-import { PhotoFrame } from '../components/PhotoFrame'
+import { FullBleedBreakout } from '../components/FullBleedBreakout'
+import { HitTraxStatGrid } from '../components/HitTraxStatGrid'
+import { PhotoOverlay } from '../components/PhotoFrame'
 import { Section } from '../components/Section'
 import { FadeUp } from '../components/motion/FadeUp'
 import { ParallaxWrap } from '../components/motion/ParallaxWrap'
 import { StaggerGroup } from '../components/motion/StaggerGroup'
-import { CountUpNumber } from '../components/CountUpNumber'
 
 const HITTRAX_STATS = [
   {
@@ -56,88 +57,78 @@ const HITTRAX_FEATURES = [
 export function HitTrax() {
   return (
     <Section id="hittrax" background="light" ariaLabelledby="hittrax-heading">
-      <FadeUp className="max-w-3xl">
+      <FadeUp>
+        <p className="font-body text-xs font-bold uppercase tracking-[0.22em] text-accent">
+          HitTrax Technology
+        </p>
         <h2
           id="hittrax-heading"
-          className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-[0.95] tracking-[-0.02em] text-ink-black"
+          className="mt-3 max-w-4xl font-display text-[clamp(2.5rem,5.5vw,4.25rem)] font-extrabold leading-[0.92] tracking-[-0.03em] text-ink-black"
         >
           Most cages give reps. We give data.
         </h2>
-        <p className="mt-4 text-base leading-relaxed text-ink-black/70 lg:text-lg">
+        <p className="mt-4 max-w-3xl text-base leading-relaxed text-ink-black/75 lg:text-lg">
           With real-time data and instant feedback, HitTrax turns every swing into actionable data
           — game-like scenarios and measurable results that help players refine their skills while
           giving coaches the insight to individualize instruction and track development over time.
         </p>
       </FadeUp>
 
-      <FadeUp delay={0.08}>
-        <ParallaxWrap>
-          <PhotoFrame aspect="facility" className="rounded-sm">
-            <Image
-              src="/images/facility-1600.webp"
-              alt="NSEC's HitTrax-equipped indoor baseball and softball training cages"
-              fill
-              sizes="(min-width: 1024px) 1180px, 100vw"
-              className="object-cover"
-              data-placeholder="true"
-            />
-          </PhotoFrame>
-        </ParallaxWrap>
+      <FadeUp delay={0.06} className="mt-[var(--spacing-section-gap)]">
+        <FullBleedBreakout>
+          <ParallaxWrap>
+            <div className="relative aspect-[21/9] min-h-[280px] w-full overflow-hidden lg:min-h-[420px]">
+              <Image
+                src="/images/facility-1600.webp"
+                alt="NSEC's HitTrax-equipped indoor baseball and softball training cages"
+                fill
+                sizes="100vw"
+                className="object-cover"
+                data-placeholder="true"
+              />
+              <PhotoOverlay />
+            </div>
+          </ParallaxWrap>
+        </FullBleedBreakout>
       </FadeUp>
 
-      <figure className="mt-12 lg:mt-16" aria-label="HitTrax performance metrics">
-        <div className="border-t-2 border-accent pt-8">
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-6">
-            {HITTRAX_STATS.map((stat) => (
-              <div key={stat.label} className="flex flex-col text-center sm:text-left">
-                <div className="flex items-end justify-center gap-1 sm:justify-start">
-                  <span className="stat-gradient-text font-data text-[clamp(3rem,8vw,5rem)] font-bold leading-none tabular-nums">
-                    <CountUpNumber value={stat.value} trigger="inview" />
-                  </span>
-                  <span className="mb-1 font-data text-lg font-bold uppercase leading-none text-accent lg:text-xl">
-                    {stat.unit}
-                  </span>
-                </div>
-                <p className="mt-3 font-body text-xs font-bold uppercase tracking-[0.15em] text-ink-black/70">
-                  {stat.label}
-                </p>
-                <p className="mt-2 min-h-[3.5rem] text-sm leading-relaxed text-ink-black/60">
-                  {stat.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </figure>
+      <div className="mt-[var(--spacing-section-gap)]">
+        <HitTraxStatGrid
+          stats={HITTRAX_STATS}
+          variant="on-light"
+          trigger="inview"
+          showDescriptions
+        />
+      </div>
 
-      <FadeUp className="mt-16 lg:mt-20">
+      <FadeUp className="mt-[var(--spacing-section-gap)]">
         <h3 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-extrabold tracking-tight text-ink-black">
           The Power of HitTrax
         </h3>
       </FadeUp>
 
-      <StaggerGroup className="mt-8 grid gap-6 sm:grid-cols-2 lg:mt-10 lg:gap-8">
+      <StaggerGroup className="mt-6 grid gap-5 sm:grid-cols-2 lg:gap-6">
         {HITTRAX_FEATURES.map((feature) => (
           <div
             key={feature.title}
             data-stagger-item
-            className="border-t border-accent/40 pt-6"
+            className="border-l-2 border-accent bg-accent-tint px-6 py-5"
           >
             <h4 className="font-display text-lg font-bold text-ink-black lg:text-xl">
               {feature.title}
             </h4>
-            <p className="mt-2 text-base leading-relaxed text-ink-black/70">
+            <p className="mt-2 text-base leading-relaxed text-ink-black/75">
               {feature.description}
             </p>
           </div>
         ))}
       </StaggerGroup>
 
-      <FadeUp className="mt-14 max-w-3xl lg:mt-16">
+      <FadeUp className="mt-[var(--spacing-section-gap)] max-w-3xl">
         <h3 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-extrabold tracking-tight text-ink-black">
           Who is HitTrax for?
         </h3>
-        <p className="mt-4 text-base leading-relaxed text-ink-black/70 lg:text-lg">
+        <p className="mt-4 text-base leading-relaxed text-ink-black/75 lg:text-lg">
           Elevates performance at every level — young players learning fundamentals, high school
           and travel athletes, and even Major League players benefit from the same industry-leading
           data capture and simulation technology.

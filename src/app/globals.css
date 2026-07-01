@@ -49,4 +49,15 @@
     background: rgb(10 11 13 / 0.82);
     backdrop-filter: blur(4px);
   }
+
+  .form-hero-shadow {
+    box-shadow:
+      -12px 20px 40px rgb(0 0 0 / 0.35),
+      12px 20px 40px rgb(0 0 0 / 0.35);
+  }
+
+  .editorial-card {
+    @apply flex h-full flex-col border-t-2 border-accent bg-paper-white p-8 ring-1 ring-ink-black/8;
+    box-shadow: 0 1px 0 rgb(201 70 44 / 0.15);
+  }
 }
