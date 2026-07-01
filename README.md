@@ -15,10 +15,11 @@ Built from a live Meta ads campaign. Primary offer: **Free Skills Evaluation**, 
 4. `CONTENT_SPEC.md` — every word that goes on the page, section by section, in build order
 5. `AGENT_INSTRUCTIONS.md` — stack, conversion/tracking requirements, definition of done, hard rules
 
-## Recommended stack
-- React 19 + TypeScript + Vite 6 + Tailwind v4 (single page, no router needed)
+## Stack
+- Next.js 15 (App Router) + React 19 + TypeScript + Tailwind v4 — see `MIGRATION_BRIEF_V5.md` for the full rationale and the session that migrated off Vite
+- `gsap` + `@gsap/react` for scroll-triggered motion (`lib/gsap.ts` is the single source of shared easing/timing)
+- `three` + `@react-three/fiber` + `@react-three/drei`, hero only, decorative ambient particle field — see `MIGRATION_BRIEF_V5.md`'s "Three.js scope" for the hard rules before touching this
 - Deployed to Vercel
-- Framer Motion for the few intentional motion moments in `DESIGN_SYSTEM.md` (optional — hand-rolled CSS transitions are fine too if you want a leaner bundle)
 
 This is one conversion-focused page, not a multi-page site. Resist adding routing, a CMS, or extra dependencies unless a `HANDOVER.md` entry explicitly calls for it.
 
@@ -34,14 +35,17 @@ Primary event: clicking/submitting "Book My Free Evaluation" → Meta Pixel `Lea
 ## Expected folder structure
 ```
 /src
-  /components
+  /app             <- Next.js App Router entry (layout.tsx, page.tsx, globals.css)
+  /components      <- shared components, incl. /components/motion GSAP primitives
   /sections        <- one component per CONTENT_SPEC.md section, same order
-  /styles          <- design tokens from DESIGN_SYSTEM.md (CSS variables / Tailwind config)
-  App.tsx
+  /hooks
+  /lib             <- gsap.ts, useReducedMotion.ts, metaPixel.ts, utm.ts
+  /styles          <- design tokens from DESIGN_SYSTEM.md (CSS variables / Tailwind @theme)
 README.md
 DESIGN_SYSTEM.md
 CONTENT_SPEC.md
 AGENT_INSTRUCTIONS.md
+MIGRATION_BRIEF_V5.md
 HANDOVER.md
 ```
 
