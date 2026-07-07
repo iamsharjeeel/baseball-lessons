@@ -39,6 +39,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 }
 
+import { LeadModalProvider } from '../context/LeadModalContext'
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -48,9 +50,11 @@ export default function RootLayout({
       className={`${bigShoulders.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body>
-        {children}
-        <StickyMobileCta />
-        <AnalyticsInit />
+        <LeadModalProvider>
+          {children}
+          <StickyMobileCta />
+          <AnalyticsInit />
+        </LeadModalProvider>
       </body>
     </html>
   )

@@ -3,6 +3,8 @@
 import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from 'react'
 import { trackLead } from '../lib/metaPixel'
 
+import { useLeadModal } from '../context/LeadModalContext'
+
 type PrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   children?: ReactNode
 }
@@ -13,9 +15,11 @@ export function PrimaryButton({
   className = '',
   ...props
 }: PrimaryButtonProps) {
+  const { openModal } = useLeadModal()
+
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     trackLead()
-    // TODO: wire up lead capture — see HANDOVER.md
+    openModal()
     onClick?.(event)
   }
 

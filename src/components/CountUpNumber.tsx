@@ -30,7 +30,7 @@ export function CountUpNumber({
     <span ref={ref} className={`whitespace-nowrap ${className}`}>
       {count}
       {suffix && (
-        <span className={`text-[0.55em] font-semibold tracking-normal uppercase ${hasSpacing ? 'ml-1' : ''}`}>
+        <span className={`inline-block pr-[0.3em] text-[0.55em] font-semibold tracking-normal uppercase ${hasSpacing ? 'ml-1' : ''}`}>
           {trimmed}
         </span>
       )}

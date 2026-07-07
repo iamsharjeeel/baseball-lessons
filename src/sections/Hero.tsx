@@ -1,16 +1,11 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import dynamic from 'next/dynamic'
+import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { PrimaryButton } from '../components/PrimaryButton'
 import { StatReadoutPanel } from '../components/StatReadoutPanel'
 import { gsap, EASE } from '../lib/gsap'
 import { useReducedMotion } from '../lib/useReducedMotion'
-
-const HeroScene = dynamic(() => import('../components/HeroScene').then((m) => m.HeroScene), {
-  ssr: false,
-})
 
 const HERO_STATS = [
   { label: 'Exit Velo', value: 78, suffix: ' MPH' },
@@ -21,29 +16,6 @@ const HERO_STATS = [
 export function Hero() {
   const reducedMotion = useReducedMotion()
   const rootRef = useRef<HTMLDivElement>(null)
-  const [canRender3D, setCanRender3D] = useState(false)
-  const [mountScene, setMountScene] = useState(false)
-  const [sceneVisible, setSceneVisible] = useState(false)
-
-  function hasWebGL(): boolean {
-    if (typeof window === 'undefined') return false
-    try {
-      const canvas = document.createElement('canvas')
-      return !!(canvas.getContext('webgl2') || canvas.getContext('webgl'))
-    } catch {
-      return false
-    }
-  }
-
-  useEffect(() => {
-    setCanRender3D(!reducedMotion && hasWebGL())
-  }, [reducedMotion])
-
-  useEffect(() => {
-    if (!canRender3D) return
-    const timeout = setTimeout(() => setMountScene(true), 500)
-    return () => clearTimeout(timeout)
-  }, [canRender3D])
 
   useGSAP(
     () => {
@@ -95,14 +67,6 @@ export function Hero() {
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(10,11,13,0.85)_0%,rgba(10,11,13,0.2)_55%,rgba(10,11,13,0)_100%)]" />
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(155,53,32,0.40)_0%,rgba(155,53,32,0)_22%)]" />
       </div>
-
-      {mountScene && (
-        <div
-          className={`absolute inset-0 transition-opacity duration-700 pointer-events-none ${sceneVisible ? 'opacity-100' : 'opacity-0'}`}
-        >
-          <HeroScene onReady={() => setSceneVisible(true)} />
-        </div>
-      )}
 
       {/* Subtle red glow from bottom-left accent */}
       <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-accent/20 blur-[80px]" />

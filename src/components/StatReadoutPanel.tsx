@@ -32,7 +32,7 @@ export function StatReadoutPanel({
   trigger = 'inview',
 }: StatReadoutPanelProps) {
   const statSizeClass =
-    size === 'hero' ? 'text-[clamp(2rem,5vw,4.5rem)]' : 'text-[clamp(2.5rem,7vw,6rem)]'
+    size === 'hero' ? 'text-[clamp(1.75rem,4.5vw,3.25rem)]' : 'text-[clamp(2.25rem,6.5vw,5rem)]'
   const labelClass = variant === 'on-dark' ? 'text-paper-white/80' : 'text-ink-black/70'
 
   return (
