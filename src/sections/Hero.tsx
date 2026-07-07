@@ -65,7 +65,7 @@ export function Hero() {
         {/* Two-layer overlay: flat tint + warm gradient edge */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-ink-black/55" />
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(10,11,13,0.85)_0%,rgba(10,11,13,0.2)_55%,rgba(10,11,13,0)_100%)]" />
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(155,53,32,0.40)_0%,rgba(155,53,32,0)_22%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(38,98,148,0.40)_0%,rgba(38,98,148,0)_22%)]" />
       </div>
 
       {/* Subtle red glow from bottom-left accent */}

@@ -11,9 +11,9 @@
   /* v5: --accent kept as the interactive/small-element register; --accent-deep
      is the same color's large-surface register (section borders, backgrounds);
      --accent-tint is a 6%-opacity background wash only, never text/borders. */
-  --color-accent: #c9462c;
-  --color-accent-deep: #9b3520;
-  --color-accent-tint: rgb(201 70 44 / 0.06);
+  --color-accent: #388dd0;
+  --color-accent-deep: #266294;
+  --color-accent-tint: rgb(56 141 208 / 0.06);
 
   --color-steel-700: #1b2027;
   --color-steel-300: #838b94;

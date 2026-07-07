@@ -15,7 +15,7 @@ export const PHOTO_TINT_CLASS = 'pointer-events-none absolute inset-0 bg-ink-bla
 export const PHOTO_GRADIENT_CLASS =
   'pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(10,11,13,0.70)_0%,rgba(10,11,13,0)_60%)]'
 export const PHOTO_WARM_EDGE_CLASS =
-  'pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(155,53,32,0.35)_0%,rgba(155,53,32,0)_18%)]'
+  'pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(38,98,148,0.35)_0%,rgba(38,98,148,0)_18%)]'
 
 export function PhotoOverlay({ warm = false }: { warm?: boolean }) {
   return (
