@@ -1,5 +1,3 @@
-import Image from 'next/image'
-import { PhotoFrame } from '../components/PhotoFrame'
 import { Section } from '../components/Section'
 import { StatReadoutPanel } from '../components/StatReadoutPanel'
 import { FadeUp } from '../components/motion/FadeUp'
@@ -32,6 +30,10 @@ export function HitTrax() {
   return (
     <Section id="hittrax" background="light" ariaLabelledby="hittrax-heading">
       <FadeUp className="max-w-2xl">
+        <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent flex items-center gap-2">
+          <span className="h-px w-6 bg-accent" />
+          Data Driven
+        </p>
         <h2
           id="hittrax-heading"
           className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-tight tracking-tight text-ink-black"
@@ -46,17 +48,19 @@ export function HitTrax() {
         </p>
       </FadeUp>
 
-      <FadeUp delay={0.1}>
-        <PhotoFrame aspect="facility" className="mt-10 rounded-md lg:mt-12">
-          <Image
-            src="/images/facility-1600.webp"
-            alt="Wide view of NSEC's indoor baseball and softball training facility with batting cages and turf"
-            fill
-            sizes="(min-width: 1024px) 1180px, 100vw"
-            className="object-cover"
-            data-placeholder="true"
+      <FadeUp delay={0.1} className="mt-10 lg:mt-12 flex justify-center">
+        <div className="relative w-full max-w-[340px] overflow-hidden rounded-2xl border border-steel-300/10 shadow-2xl aspect-[9/16]">
+          <video
+            src="/images/ghost-hitting-video.mp4"
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="h-full w-full object-cover"
           />
-        </PhotoFrame>
+          {/* Subtle vignette */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(10,11,13,0.3)_0%,rgba(10,11,13,0)_25%)]" />
+        </div>
       </FadeUp>
 
       <div className="mt-12 lg:mt-16">

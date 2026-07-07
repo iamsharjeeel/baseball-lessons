@@ -1,35 +1,25 @@
 import { PrimaryButton } from '../components/PrimaryButton'
-import { PlaceholderTag } from '../components/PlaceholderTag'
 import { Section } from '../components/Section'
 import { FadeUp } from '../components/motion/FadeUp'
-
-const PRICE_NOTE = 'PLACEHOLDER — confirm real price with David before launch'
 
 const PROGRAMS = [
   {
     name: 'Free Evaluation',
-    price: '$0',
-    placeholder: false,
-    description: 'Start here if you’re not sure what your athlete needs yet.',
-    cta: 'Book My Free Evaluation',
+    description: 'Start here if you\'re not sure what your athlete needs yet.',
     featured: false,
+    badge: null,
   },
   {
     name: 'Single Lesson',
-    price: '$65',
-    placeholder: true,
     description: 'One-on-one session, any skill focus.',
-    cta: 'Book a Lesson',
     featured: false,
+    badge: null,
   },
   {
     name: '4-Lesson Package',
-    price: '$240',
-    placeholder: true,
-    priceNote: '$60/lesson, buy 4 get 1 free',
     description: 'Buy 4, get 1 free. Best for consistent progress.',
-    cta: 'Book My Free Evaluation',
     featured: true,
+    badge: 'Most Popular',
   },
 ]
 
@@ -37,6 +27,10 @@ export function Programs() {
   return (
     <Section id="programs" background="light" ariaLabelledby="programs-heading">
       <FadeUp>
+        <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent flex items-center gap-2">
+          <span className="h-px w-6 bg-accent" />
+          Training Built for Every Athlete
+        </p>
         <h2
           id="programs-heading"
           className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-tight tracking-tight text-ink-black"
@@ -48,28 +42,41 @@ export function Programs() {
       <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-3 lg:gap-8">
         {PROGRAMS.map((program, index) => (
           <FadeUp key={program.name} delay={index * 0.08}>
-            <div
-              className={`flex h-full flex-col rounded-md bg-paper-white p-8 shadow-sm ring-1 ring-steel-300/30 ${
-                program.featured ? 'border-t-4 border-accent' : ''
-              }`}
-            >
-              <h3 className="font-display text-xl font-bold tracking-tight text-ink-black">
-                {program.name}
-              </h3>
-              <p className="mt-4 flex items-baseline font-data text-4xl font-bold text-accent">
-                {program.price}
-                {program.placeholder && <PlaceholderTag note={PRICE_NOTE} />}
-              </p>
-              {program.priceNote && (
-                <p className="mt-1 text-sm text-ink-black/60">{program.priceNote}</p>
-              )}
-              <p className="mt-4 text-base leading-relaxed text-ink-black/70">
-                {program.description}
-              </p>
-              <div className="mt-8">
-                <PrimaryButton className="w-full">{program.cta}</PrimaryButton>
+            {program.featured ? (
+              /* Featured card — dark premium treatment */
+              <div className="relative flex h-full flex-col overflow-hidden rounded-xl bg-ink-black p-8 shadow-2xl ring-1 ring-accent/30">
+                {/* Glow effect */}
+                <div aria-hidden="true" className="pointer-events-none absolute -top-16 left-1/2 h-32 w-48 -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
+                {/* Badge */}
+                {program.badge && (
+                  <span className="mb-6 inline-block self-start rounded-sm bg-accent px-3 py-1 font-body text-xs font-bold uppercase tracking-widest text-paper-white">
+                    {program.badge}
+                  </span>
+                )}
+                <h3 className="font-display text-xl font-bold tracking-tight text-paper-white">
+                  {program.name}
+                </h3>
+                <p className="mt-4 flex-1 text-base leading-relaxed text-paper-white/70">
+                  {program.description}
+                </p>
+                <div className="mt-8">
+                  <PrimaryButton className="w-full" />
+                </div>
               </div>
-            </div>
+            ) : (
+              /* Standard card */
+              <div className="flex h-full flex-col rounded-xl bg-paper-white p-8 shadow-sm ring-1 ring-steel-300/25 border-t-4 border-steel-300/20 hover:border-accent/60 transition-colors">
+                <h3 className="font-display text-xl font-bold tracking-tight text-ink-black">
+                  {program.name}
+                </h3>
+                <p className="mt-4 flex-1 text-base leading-relaxed text-ink-black/70">
+                  {program.description}
+                </p>
+                <div className="mt-8">
+                  <PrimaryButton className="w-full" />
+                </div>
+              </div>
+            )}
           </FadeUp>
         ))}
       </div>

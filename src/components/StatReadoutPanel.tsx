@@ -32,7 +32,7 @@ export function StatReadoutPanel({
   trigger = 'inview',
 }: StatReadoutPanelProps) {
   const statSizeClass =
-    size === 'hero' ? 'text-[clamp(2.5rem,6vw,5rem)]' : 'text-[clamp(3.5rem,9vw,7rem)]'
+    size === 'hero' ? 'text-[clamp(2rem,5vw,4.5rem)]' : 'text-[clamp(2.5rem,7vw,6rem)]'
   const labelClass = variant === 'on-dark' ? 'text-paper-white/80' : 'text-ink-black/70'
 
   return (
@@ -43,7 +43,7 @@ export function StatReadoutPanel({
       >
         {stats.map((stat) => (
           <div key={stat.label}>
-            <p className={`stat-gradient-text font-data font-bold leading-none ${statSizeClass}`}>
+            <p className={`stat-gradient-text font-data font-bold leading-none pr-3 ${statSizeClass}`}>
               <CountUpNumber value={stat.value} suffix={stat.suffix} trigger={trigger} />
             </p>
             <p className={`mt-2 font-body text-xs font-semibold uppercase tracking-wider lg:text-sm ${labelClass}`}>

@@ -9,7 +9,7 @@ const LINEUP_STEPS = [
     tag: 'LEAD-OFF',
     title: 'Free Skills Evaluation',
     description:
-      'A real coach watches your athlete hit, field, or throw and gives you an honest read on where they’re at. No pitch, no pressure.',
+      'A real coach watches your athlete hit, field, or throw and gives you an honest read on where they\'re at. No pitch, no pressure.',
   },
   {
     number: 2,
@@ -45,6 +45,10 @@ export function Lineup() {
   return (
     <Section id="lineup" background="light" ariaLabelledby="lineup-heading">
       <FadeUp className="max-w-2xl">
+        <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent flex items-center gap-2">
+          <span className="h-px w-6 bg-accent" />
+          The Process
+        </p>
         <h2
           id="lineup-heading"
           className="font-display text-[clamp(2.25rem,5vw,4rem)] font-extrabold leading-tight tracking-tight text-ink-black"
@@ -56,31 +60,22 @@ export function Lineup() {
         </p>
       </FadeUp>
 
-      <StaggerGroup className="mt-12 lg:mt-16">
-        {LINEUP_STEPS.map((step, index) => (
+      <StaggerGroup className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-6">
+        {LINEUP_STEPS.map((step) => (
           <div
             key={step.number}
             data-stagger-item
-            className={`grid grid-cols-[auto_1fr] items-start gap-6 py-12 lg:grid-cols-[200px_1fr] lg:gap-12 ${
-              index !== 0 ? 'border-t border-steel-300/30' : ''
-            }`}
+            className="flex flex-col border-t border-steel-300/20 pt-6 lg:pt-8"
           >
-            <div>
-              <p className="stat-gradient-text font-data text-[clamp(3.5rem,9vw,7rem)] font-bold leading-none">
-                <CountUpNumber value={step.number} trigger="inview" duration={600} />
-              </p>
-              <p className="mt-1 font-body text-xs font-semibold uppercase tracking-widest text-steel-300">
-                {step.tag}
-              </p>
-            </div>
-            <div className="pt-2 lg:pt-4">
-              <h3 className="font-display text-2xl font-bold tracking-tight text-ink-black lg:text-3xl">
-                {step.title}
-              </h3>
-              <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-black/70 lg:text-lg">
-                {step.description}
-              </p>
-            </div>
+            <p className="stat-gradient-text font-data text-5xl lg:text-7xl font-bold leading-none mb-3">
+              <CountUpNumber value={step.number} trigger="inview" duration={600} />
+            </p>
+            <h3 className="font-display text-xl font-bold tracking-tight text-ink-black">
+              {step.title}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-ink-black/70">
+              {step.description}
+            </p>
           </div>
         ))}
       </StaggerGroup>

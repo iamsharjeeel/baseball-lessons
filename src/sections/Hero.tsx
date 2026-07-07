@@ -2,11 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import dynamic from 'next/dynamic'
-import Image from 'next/image'
 import { useGSAP } from '@gsap/react'
 import { PrimaryButton } from '../components/PrimaryButton'
 import { StatReadoutPanel } from '../components/StatReadoutPanel'
-import { PhotoOverlay } from '../components/PhotoFrame'
 import { gsap, EASE } from '../lib/gsap'
 import { useReducedMotion } from '../lib/useReducedMotion'
 
@@ -20,16 +18,6 @@ const HERO_STATS = [
   { label: 'Distance', value: 212, suffix: ' FT' },
 ]
 
-function hasWebGL(): boolean {
-  if (typeof window === 'undefined') return false
-  try {
-    const canvas = document.createElement('canvas')
-    return !!(canvas.getContext('webgl2') || canvas.getContext('webgl'))
-  } catch {
-    return false
-  }
-}
-
 export function Hero() {
   const reducedMotion = useReducedMotion()
   const rootRef = useRef<HTMLDivElement>(null)
@@ -37,9 +25,16 @@ export function Hero() {
   const [mountScene, setMountScene] = useState(false)
   const [sceneVisible, setSceneVisible] = useState(false)
 
-  // Three.js scope is decorative-only and must never compete with LCP —
-  // feature-detect before even requesting the chunk, and mount only after
-  // the hero's own load sequence has started painting.
+  function hasWebGL(): boolean {
+    if (typeof window === 'undefined') return false
+    try {
+      const canvas = document.createElement('canvas')
+      return !!(canvas.getContext('webgl2') || canvas.getContext('webgl'))
+    } catch {
+      return false
+    }
+  }
+
   useEffect(() => {
     setCanRender3D(!reducedMotion && hasWebGL())
   }, [reducedMotion])
@@ -86,45 +81,53 @@ export function Hero() {
       className="relative min-h-[640px] overflow-hidden px-4 py-16 lg:min-h-[760px] lg:px-8 lg:py-[120px]"
       aria-labelledby="hero-heading"
     >
+      {/* Animated GIF background — must use <img> not Next/Image to preserve animation frames */}
       <div className="absolute inset-0">
-        <Image
-          src="/images/hero-1920.webp"
-          alt="A young baseball player mid-swing at NSEC's indoor batting cage"
-          priority
-          fill
-          sizes="100vw"
-          className="object-cover"
-          data-placeholder="true"
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/ghost-logo-baseball.gif"
+          alt=""
+          aria-hidden="true"
+          className="h-full w-full object-cover object-center"
         />
-        <PhotoOverlay warm />
+        {/* Two-layer overlay: flat tint + warm gradient edge */}
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-ink-black/55" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(10,11,13,0.85)_0%,rgba(10,11,13,0.2)_55%,rgba(10,11,13,0)_100%)]" />
+        <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(155,53,32,0.40)_0%,rgba(155,53,32,0)_22%)]" />
       </div>
 
       {mountScene && (
         <div
-          className={`transition-opacity duration-700 ${sceneVisible ? 'opacity-100' : 'opacity-0'}`}
+          className={`absolute inset-0 transition-opacity duration-700 pointer-events-none ${sceneVisible ? 'opacity-100' : 'opacity-0'}`}
         >
           <HeroScene onReady={() => setSceneVisible(true)} />
         </div>
       )}
 
+      {/* Subtle red glow from bottom-left accent */}
+      <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-accent/20 blur-[80px]" />
+
       <div className="relative z-10 mx-auto grid max-w-[var(--max-width-content)] items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="text-center lg:text-left">
           <p
             data-hero-item
-            className="mb-4 font-body text-sm uppercase tracking-widest text-steel-300"
+            className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-steel-300"
           >
+            <span className="h-px w-6 bg-accent" />
             Newtown, PA · Ages 6–College
           </p>
           <h1
             id="hero-heading"
             data-hero-item
-            className="font-display text-[clamp(3rem,8vw,6.5rem)] font-extrabold leading-[0.95] tracking-tight text-paper-white"
+            className="font-display text-[clamp(3rem,8vw,6.5rem)] font-extrabold leading-[0.93] tracking-tight text-paper-white"
           >
-            See exactly where your athlete stands. For free.
+            See exactly where your athlete{' '}
+            <span className="text-accent">stands.</span>{' '}
+            <span className="whitespace-nowrap">For free.</span>
           </h1>
           <p
             data-hero-item
-            className="mt-6 max-w-xl text-base leading-relaxed text-paper-white/90 lg:text-lg"
+            className="mt-6 max-w-lg text-base leading-relaxed text-paper-white/80 lg:text-lg"
           >
             One-on-one baseball &amp; softball coaching from college and
             pro-level instructors — backed by HitTrax, the same real-time data
@@ -132,20 +135,27 @@ export function Hero() {
           </p>
           <div data-hero-item className="mt-8 flex flex-col items-center gap-3 lg:items-start">
             <PrimaryButton />
-            <p className="text-sm text-steel-300">
+            <p className="flex items-center gap-1.5 text-sm text-steel-300">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+                <circle cx="7" cy="7" r="6.5" stroke="currentColor" strokeOpacity="0.5"/>
+                <path d="M4.5 7l2 2 3-3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
               No cost. No equipment needed. 30 minutes with a real coach.
             </p>
           </div>
         </div>
 
         <div data-hero-item className="w-full">
-          <StatReadoutPanel
-            stats={HERO_STATS}
-            caption="Real HitTrax output from an NSEC training session"
-            size="hero"
-            variant="on-dark"
-            trigger="mount"
-          />
+          {/* Glassmorphism stat panel */}
+          <div className="rounded-xl border border-paper-white/10 bg-ink-black/40 p-6 backdrop-blur-sm lg:p-8">
+            <StatReadoutPanel
+              stats={HERO_STATS}
+              caption="Real HitTrax output from an NSEC training session"
+              size="hero"
+              variant="on-dark"
+              trigger="mount"
+            />
+          </div>
         </div>
       </div>
     </section>

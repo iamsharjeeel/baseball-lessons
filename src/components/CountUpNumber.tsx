@@ -23,10 +23,17 @@ export function CountUpNumber({
   const enabled = trigger === 'mount' || inView
   const count = useCountUp(value, duration, enabled)
 
+  const trimmed = suffix.trim()
+  const hasSpacing = suffix.startsWith(' ') || suffix.includes(' ')
+
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={`whitespace-nowrap ${className}`}>
       {count}
-      {suffix}
+      {suffix && (
+        <span className={`text-[0.55em] font-semibold tracking-normal uppercase ${hasSpacing ? 'ml-1' : ''}`}>
+          {trimmed}
+        </span>
+      )}
     </span>
   )
 }
