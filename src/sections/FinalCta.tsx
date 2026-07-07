@@ -25,9 +25,12 @@ export function FinalCta() {
         <div className="mt-10 flex justify-center">
           <PrimaryButton />
         </div>
-        <div className="mt-8 flex flex-col items-center gap-1 text-sm text-steel-300">
-          <a href="tel:+12672887053" className="hover:text-paper-white/80 transition-colors">(267) 288-7053</a>
-          <span>&middot;</span>
+        <div className="mt-8 flex flex-col items-center gap-2 text-sm text-steel-300">
+          <div className="flex items-center gap-2">
+            <a href="tel:+12672887053" className="hover:text-paper-white/80 transition-colors font-medium">(267) 288-7053</a>
+            <span>&middot;</span>
+            <a href="https://nacsportscenter.com/" target="_blank" rel="noopener noreferrer" className="hover:text-paper-white/80 transition-colors font-medium">nacsportscenter.com</a>
+          </div>
           <span>207 Penns Trail, Newtown, PA 18940</span>
         </div>
       </FadeUp>

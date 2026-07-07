@@ -25,7 +25,7 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
   const [formData, setFormData] = useState({
     athleteName: '',
     athleteAge: '',
-    focusArea: 'Hitting',
+    inquiryType: 'Baseball / Softball Programs',
     parentName: '',
     parentEmail: '',
     parentPhone: '',
@@ -38,7 +38,7 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
     setFormData({
       athleteName: '',
       athleteAge: '',
-      focusArea: 'Hitting',
+      inquiryType: 'Baseball / Softball Programs',
       parentName: '',
       parentEmail: '',
       parentPhone: '',
@@ -153,22 +153,22 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
                     </div>
                   </div>
 
-                  {/* Focus Area Select */}
+                  {/* Inquiry Type Select */}
                   <div>
-                    <label htmlFor="focusArea" className="block text-xs font-semibold uppercase tracking-wider text-paper-white/60 mb-1.5">
-                      Focus Area
+                    <label htmlFor="inquiryType" className="block text-xs font-semibold uppercase tracking-wider text-paper-white/60 mb-1.5">
+                      What are you reaching about?
                     </label>
                     <select
-                      id="focusArea"
-                      value={formData.focusArea}
-                      onChange={(e) => setFormData({ ...formData, focusArea: e.target.value })}
+                      id="inquiryType"
+                      value={formData.inquiryType}
+                      onChange={(e) => setFormData({ ...formData, inquiryType: e.target.value })}
                       className="w-full rounded-md border border-steel-300/20 bg-steel-700/30 px-3.5 py-2 font-body text-sm text-paper-white outline-none focus:border-accent/80 transition-colors"
                     >
-                      <option value="Hitting" className="bg-ink-black text-paper-white">Hitting</option>
-                      <option value="Pitching" className="bg-ink-black text-paper-white">Pitching</option>
-                      <option value="Fielding" className="bg-ink-black text-paper-white">Fielding</option>
-                      <option value="Catching" className="bg-ink-black text-paper-white">Catching</option>
-                      <option value="Softball" className="bg-ink-black text-paper-white">Softball (All Skills)</option>
+                      <option value="Baseball / Softball Programs" className="bg-ink-black text-paper-white">Baseball / Softball Programs</option>
+                      <option value="Event Space Rentals" className="bg-ink-black text-paper-white">Event Space Rentals</option>
+                      <option value="Sports Equipment Rentals" className="bg-ink-black text-paper-white">Sports Equipment Rentals</option>
+                      <option value="General Question" className="bg-ink-black text-paper-white">General Question</option>
+                      <option value="Other" className="bg-ink-black text-paper-white">Other</option>
                     </select>
                   </div>
 
@@ -249,10 +249,7 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
                   You're in the lineup!
                 </h3>
                 <p className="mt-4 text-base leading-relaxed text-paper-white/80 max-w-sm">
-                  We've received your booking request for **{formData.athleteName}**.
-                </p>
-                <p className="mt-2 text-sm leading-relaxed text-paper-white/60 max-w-sm">
-                  An NSEC coach will call or text you at **{formData.parentPhone}** within 24 hours to coordinate dates and times.
+                  We've received your request! A member of the NSEC team will contact you at **{formData.parentPhone}** within 24 hours.
                 </p>
                 <button
                   onClick={closeModal}
