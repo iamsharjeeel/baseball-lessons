@@ -68,8 +68,26 @@ export function Hero() {
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(38,98,148,0.40)_0%,rgba(38,98,148,0)_22%)]" />
       </div>
 
-      {/* Subtle red glow from bottom-left accent */}
+      {/* Subtle blue glow from bottom-left accent */}
       <div aria-hidden="true" className="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-accent/20 blur-[80px]" />
+
+      {/* Top Header / Logo Bar */}
+      <div className="relative z-20 mx-auto mb-12 flex max-w-[var(--max-width-content)] items-center justify-between border-b border-paper-white/10 pb-6 lg:mb-16">
+        <a href="#" aria-label="NSEC Home" className="transition-transform hover:scale-[1.02]">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://nacsportscenter.com/wp-content/uploads/2026/01/NSEC-Primary-Logo-All-White-Web.png"
+            alt="Newtown Sports & Events Center Logo"
+            className="h-10 w-auto object-contain lg:h-12"
+          />
+        </a>
+        <a href="tel:+12672887053" className="inline-flex items-center gap-1.5 text-sm font-semibold tracking-wider uppercase text-paper-white hover:text-accent transition-colors">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span className="hidden sm:inline">(267) 288-7053</span>
+        </a>
+      </div>
 
       <div className="relative z-10 mx-auto grid max-w-[var(--max-width-content)] items-center gap-10 lg:grid-cols-2 lg:gap-16">
         <div className="text-center lg:text-left">

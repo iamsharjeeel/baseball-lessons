@@ -25,7 +25,18 @@ export function FinalCta() {
         <div className="mt-10 flex justify-center">
           <PrimaryButton />
         </div>
-        <div className="mt-8 flex flex-col items-center gap-2 text-sm text-steel-300">
+        
+        {/* Footer Logo */}
+        <div className="mt-12 flex justify-center opacity-85 hover:opacity-100 transition-opacity">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="https://nacsportscenter.com/wp-content/uploads/2026/01/NSEC-Primary-Logo-All-White-Web.png"
+            alt="Newtown Sports & Events Center Logo"
+            className="h-10 w-auto object-contain lg:h-12"
+          />
+        </div>
+
+        <div className="mt-6 flex flex-col items-center gap-2 text-sm text-steel-300">
           <div className="flex items-center gap-2">
             <a href="tel:+12672887053" className="hover:text-paper-white/80 transition-colors font-medium">(267) 288-7053</a>
             <span>&middot;</span>
