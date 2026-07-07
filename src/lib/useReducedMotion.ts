@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react'
 
 /**
  * Single source of truth for `prefers-reduced-motion` — every GSAP timeline
- * and the Three.js hero mount check against this same hook, per
- * MIGRATION_BRIEF_V5.md.
+ * gates against this hook.
  *
  * Always initializes to `false` (matching the server-rendered default,
  * since `window` doesn't exist during SSR) and corrects itself in an

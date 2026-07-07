@@ -1,16 +1,7 @@
 @theme {
-  /* v5: warmer near-black and warmer off-white — true #000/flat neutrals
-     read cheap at this brightness range, a hair of warmth reads expensive.
-     paper-white doubles as the "text on dark" color (matching how
-     DESIGN_SYSTEM.md's v3 palette was always specified — a prior session
-     had introduced a separate chalk-white token for this job that isn't
-     part of the documented palette; consolidated back to one white). */
   --color-ink-black: #0a0b0d;
   --color-paper-white: #faf8f4;
 
-  /* v5: --accent kept as the interactive/small-element register; --accent-deep
-     is the same color's large-surface register (section borders, backgrounds);
-     --accent-tint is a 6%-opacity background wash only, never text/borders. */
   --color-accent: #388dd0;
   --color-accent-deep: #266294;
   --color-accent-tint: rgb(56 141 208 / 0.06);
@@ -23,4 +14,7 @@
   --font-data: var(--font-jetbrains-mono), ui-monospace, monospace;
 
   --max-width-content: 1180px;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
 }

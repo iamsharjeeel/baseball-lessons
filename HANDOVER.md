@@ -172,3 +172,45 @@ Per `AGENT_INSTRUCTIONS.md`'s instruction to check actual Network tab timing rat
 - The "Failed to find font override values for font `Big Shoulders`" build-time notice is expected and harmless — Big Shoulders isn't in Next's bundled fallback-metrics dataset, so it just skips a minor layout-shift optimization for the font-swap moment; the font still self-hosts and loads correctly (confirmed via the preload link in the rendered `<head>`).
 
 **Next session should start with:** A real human/design review of the v5 pass specifically (hero composition, the gradient-fill numbers, the grain texture at actual viewing distance) before calling this final — then, separately and whenever David's numbers land, resolve the pricing/trust-bar/testimonial placeholders that have been open since Session 0.
+
+## Session 4 — 2026-07-07
+**Goal this session:** Design overhaul plan — review-first audit, hero mockups, P0/P1/P2 implementation, lock `design-spec.md`.
+
+**What got done:**
+- Added `design-review.md` (P0/P1/P2 audit) and three hero mockups in `mockups/` (photo, brand visual, type-led).
+- Implemented **Variant A photo hero**: `next/image` with `priority` on `/images/hero-1920.webp`, `PhotoOverlay warm`, removed GIF/glass/glow.
+- Restored white-dominant rhythm: `TrustBar` on `paper-white` with dark text; dark beat only Testimonials + Final CTA.
+- Rebuilt `Lineup` as full-width rows with oversized left-column numbers per spec.
+- Lead modal: inline error banner (no `alert()`), fixed success phone display, Escape + focus trap + focus return.
+- Programs: one primary CTA on featured card; secondary outline buttons on other cards.
+- Testimonials: white card-on-dark treatment; removed glass blur.
+- Unified container strategy: divider + accent hairlines; removed heavy shadows/glows from Programs, HitTrax, FinalCta, modal.
+- Added radius tokens; normalized buttons/cards to `rounded-md` (6px).
+- Removed unused `HeroScene.tsx` and Three.js dependencies.
+- Emitted `design-spec.md` as single source of truth; updated README, CHANGELOG.
+
+**Decisions made (and why):**
+- **Blue accent `#388dd0`** kept (current code / NSEC brand alignment) rather than reverting to clay red in `DESIGN_SYSTEM.md` — documented in `design-spec.md`.
+- **Photo hero (Variant A)** chosen for implementation — best fit for sports coaching conversion; mockups B/C kept for comparison.
+- **Three.js removed** — unwired dead code; photo hero doesn't need decorative particles.
+
+**Waiting on client / open questions:** Unchanged from prior sessions (trust bar stats, pricing, noindex).
+
+**Known issues / not done yet:** Hero mockups reference local image path — open `mockups/hero-variant-a-photo.html` from repo root for best photo preview.
+
+**Next session should start with:** Human review of live page vs `mockups/` and `design-spec.md`; swap placeholder photos when NSEC assets arrive.
+
+## Session 5 — 2026-07-07
+**Goal this session:** Lineup horizontal + swipe refinement — remove duplicate #2/#3/#4 tags, 5-column desktop row, swipeable mobile cards.
+
+**What got done:**
+- Refactored `Lineup.tsx`: dropped `#2`/`#3`/`#4` tags; kept `LEAD-OFF` and `CLEANUP` only.
+- Desktop: single `lg:grid-cols-5` row with vertical dividers; numbers scaled to `clamp(2.5rem, 5vw, 4.5rem)`.
+- Mobile: CSS scroll-snap swipe cards (`min-w-[85vw]`, bordered card surface) with hint text below.
+- Updated `design-spec.md`, `CHANGELOG.md`.
+
+**Decisions made (and why):**
+- One responsive `StaggerGroup` (flex on mobile, grid on lg+) so scroll-in stagger applies to the same DOM nodes on both breakpoints.
+- No new carousel dependency — native snap scroll only.
+
+**Next session should start with:** Preview Lineup at 390px (swipe) and 1440px (5 columns); no other section changes needed unless human review flags something.

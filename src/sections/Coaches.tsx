@@ -11,7 +11,7 @@ export function Coaches() {
           {/* Accent bar + image wrapper for visual punch */}
           <div className="relative flex gap-3 lg:gap-4">
             <div className="w-1 shrink-0 rounded-full bg-gradient-to-b from-accent to-accent-deep" />
-            <PhotoFrame aspect="coach" className="flex-1 rounded-md overflow-hidden shadow-xl">
+            <PhotoFrame aspect="coach" className="flex-1 overflow-hidden rounded-md">
               <Image
                 src="/images/ghost-kid.jpg"
                 alt="A Ghost Baseball athlete in the indoor training facility holding a glove"

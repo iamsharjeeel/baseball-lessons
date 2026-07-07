@@ -27,7 +27,7 @@ export function Programs() {
   return (
     <Section id="programs" background="light" ariaLabelledby="programs-heading">
       <FadeUp>
-        <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent flex items-center gap-2">
+        <p className="mb-4 flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent">
           <span className="h-px w-6 bg-accent" />
           Training Built for Every Athlete
         </p>
@@ -43,11 +43,7 @@ export function Programs() {
         {PROGRAMS.map((program, index) => (
           <FadeUp key={program.name} delay={index * 0.08}>
             {program.featured ? (
-              /* Featured card — dark premium treatment */
-              <div className="relative flex h-full flex-col overflow-hidden rounded-xl bg-ink-black p-8 shadow-2xl ring-1 ring-accent/30">
-                {/* Glow effect */}
-                <div aria-hidden="true" className="pointer-events-none absolute -top-16 left-1/2 h-32 w-48 -translate-x-1/2 rounded-full bg-accent/20 blur-3xl" />
-                {/* Badge */}
+              <div className="relative flex h-full flex-col overflow-hidden rounded-md border-t-4 border-accent bg-ink-black p-8">
                 {program.badge && (
                   <span className="mb-6 inline-block self-start rounded-sm bg-accent px-3 py-1 font-body text-xs font-bold uppercase tracking-widest text-paper-white">
                     {program.badge}
@@ -64,8 +60,7 @@ export function Programs() {
                 </div>
               </div>
             ) : (
-              /* Standard card */
-              <div className="flex h-full flex-col rounded-xl bg-paper-white p-8 shadow-sm ring-1 ring-steel-300/25 border-t-4 border-steel-300/20 hover:border-accent/60 transition-colors">
+              <div className="flex h-full flex-col rounded-md border border-steel-300/25 border-t-4 border-t-steel-300/20 bg-paper-white p-8">
                 <h3 className="font-display text-xl font-bold tracking-tight text-ink-black">
                   {program.name}
                 </h3>
@@ -73,7 +68,9 @@ export function Programs() {
                   {program.description}
                 </p>
                 <div className="mt-8">
-                  <PrimaryButton className="w-full" />
+                  <PrimaryButton variant="secondary" className="w-full">
+                    Book evaluation
+                  </PrimaryButton>
                 </div>
               </div>
             )}

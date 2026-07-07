@@ -1,11 +1,6 @@
 import { DarkSection } from '../components/DarkSection'
 import { FadeUp } from '../components/motion/FadeUp'
 
-/**
- * Section 7 per CONTENT_SPEC.md — testimonials are the one category of
- * gap that never gets a placeholder value, only a clearly-flagged empty
- * slot. Do not fill this with an invented quote.
- */
 const TESTIMONIALS = [
   {
     quote: "Great baseball facility. Plenty of tunnels for pitching and hitting plus room for an entire infield practice.",
@@ -29,7 +24,7 @@ export function Testimonials() {
     <DarkSection id="testimonials" ariaLabelledby="testimonials-heading">
       <FadeUp>
         <div className="text-center">
-          <p className="mb-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent inline-flex items-center gap-2">
+          <p className="mb-4 inline-flex items-center gap-2 font-body text-xs font-semibold uppercase tracking-[0.2em] text-accent">
             <span className="h-px w-6 bg-accent" />
             Testimonials
             <span className="h-px w-6 bg-accent" />
@@ -46,18 +41,25 @@ export function Testimonials() {
           {TESTIMONIALS.map((t, idx) => (
             <div
               key={idx}
-              className="flex flex-col justify-between rounded-xl border border-paper-white/10 bg-paper-white/5 p-8 backdrop-blur-sm shadow-xl"
+              className="flex flex-col justify-between rounded-md bg-paper-white p-8"
             >
-              <p className="font-body text-base italic leading-relaxed text-paper-white/80">
+              <p className="font-body text-base italic leading-relaxed text-ink-black/80">
                 &ldquo;{t.quote}&rdquo;
               </p>
-              <div className="mt-6 border-t border-paper-white/10 pt-4">
-                <p className="font-display text-lg font-bold text-paper-white">
-                  {t.author}
-                </p>
-                <p className="font-body text-xs text-steel-300">
-                  {t.role}
-                </p>
+              <div className="mt-6 border-t border-steel-300/25 pt-4">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent font-display text-sm font-bold text-paper-white">
+                    {t.author.charAt(0)}
+                  </span>
+                  <div>
+                    <p className="font-display text-lg font-bold text-ink-black">
+                      {t.author}
+                    </p>
+                    <p className="font-body text-xs text-steel-300">
+                      {t.role}
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

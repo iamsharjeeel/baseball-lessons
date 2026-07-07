@@ -50,7 +50,7 @@ export function HitTrax() {
         </FadeUp>
 
         <FadeUp delay={0.1} className="flex justify-center lg:justify-end">
-          <div className="relative w-full max-w-[320px] overflow-hidden rounded-2xl border border-steel-300/10 shadow-2xl aspect-[9/16]">
+          <div className="relative aspect-[9/16] w-full max-w-[320px] overflow-hidden rounded-md border border-steel-300/25">
             <video
               src="/images/ghost-hitting-video.mp4"
               autoPlay

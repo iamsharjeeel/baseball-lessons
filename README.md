@@ -6,19 +6,18 @@ A single-purpose, paid-traffic landing page for Newtown Sports and Events Center
 This is **not** a rebuild of nacsportscenter.com. No nav, no distractions, no competing CTAs. One job, done well.
 
 ## Source brief
-Built from a live Meta ads campaign. Primary offer: **Free Skills Evaluation**, with a "Fall Ball Ready" seasonal urgency angle and HitTrax (real-time hitting data) as the core differentiator vs. generic batting cages. Full approved copy lives in `CONTENT_SPEC.md`. Visual system lives in `DESIGN_SYSTEM.md`.
+Built from a live Meta ads campaign. Primary offer: **Free Skills Evaluation**, with a "Fall Ball Ready" seasonal urgency angle and HitTrax (real-time hitting data) as the core differentiator vs. generic batting cages. Full approved copy lives in `CONTENT_SPEC.md`. Visual system lives in **`design-spec.md`** (supersedes `DESIGN_SYSTEM.md`).
 
 ## Read these in order, every single session
 1. **`HANDOVER.md`** — read this *first*, always. It tells you what's already built and exactly where to pick up.
 2. `README.md` (this file) — orientation if you're new to the project
-3. `DESIGN_SYSTEM.md` — colors, type, components, motion rules. Don't invent outside this.
+3. **`design-spec.md`** — locked colors, type, components, motion rules. Don't invent outside this. (`DESIGN_SYSTEM.md` is historical.)
 4. `CONTENT_SPEC.md` — every word that goes on the page, section by section, in build order
 5. `AGENT_INSTRUCTIONS.md` — stack, conversion/tracking requirements, definition of done, hard rules
 
 ## Stack
 - Next.js 15 (App Router) + React 19 + TypeScript + Tailwind v4 — see `MIGRATION_BRIEF_V5.md` for the full rationale and the session that migrated off Vite
 - `gsap` + `@gsap/react` for scroll-triggered motion (`lib/gsap.ts` is the single source of shared easing/timing)
-- `three` + `@react-three/fiber` + `@react-three/drei`, hero only, decorative ambient particle field — see `MIGRATION_BRIEF_V5.md`'s "Three.js scope" for the hard rules before touching this
 - Deployed to Vercel
 
 This is one conversion-focused page, not a multi-page site. Resist adding routing, a CMS, or extra dependencies unless a `HANDOVER.md` entry explicitly calls for it.
@@ -40,9 +39,12 @@ Primary event: clicking/submitting "Book My Free Evaluation" → Meta Pixel `Lea
   /sections        <- one component per CONTENT_SPEC.md section, same order
   /hooks
   /lib             <- gsap.ts, useReducedMotion.ts, metaPixel.ts, utm.ts
-  /styles          <- design tokens from DESIGN_SYSTEM.md (CSS variables / Tailwind @theme)
+  /styles          <- design tokens from design-spec.md (CSS variables / Tailwind @theme)
 README.md
-DESIGN_SYSTEM.md
+design-spec.md
+design-review.md
+mockups/           <- hero variant HTML mockups for comparison
+DESIGN_SYSTEM.md   <- historical; superseded by design-spec.md
 CONTENT_SPEC.md
 AGENT_INSTRUCTIONS.md
 MIGRATION_BRIEF_V5.md
