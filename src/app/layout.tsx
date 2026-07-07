@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   description:
     '1-on-1 baseball & softball coaching for ages 6–college, powered by HitTrax data. Book a free skills evaluation at Newtown Sports and Events Center.',
   icons: {
-    icon: '/favicon.svg',
+    icon: 'https://nacsportscenter.com/wp-content/uploads/2026/01/NSEC-Primary-Logo-All-White-Web.png',
   },
 }
 
