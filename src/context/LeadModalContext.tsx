@@ -53,9 +53,14 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulate server side request submission
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const response = await fetch('/api/lead', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+      if (!response.ok) throw new Error('Submission failed')
+
       // Save locally to localstorage as lead backup
       const savedLeads = JSON.parse(localStorage.getItem('nsec_leads') || '[]')
       savedLeads.push({
@@ -66,8 +71,10 @@ export function LeadModalProvider({ children }: { children: ReactNode }) {
       
       setIsSubmitting(false)
       setIsSuccess(true)
-    } catch {
+    } catch (err) {
+      console.error(err)
       setIsSubmitting(false)
+      alert('There was a problem submitting your request. Please try again or call us directly.')
     }
   }
 
