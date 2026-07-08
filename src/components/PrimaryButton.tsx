@@ -10,7 +10,7 @@ type PrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 }
 
 export function PrimaryButton({
-  children = 'Book My Free Evaluation',
+  children = 'Book my Intro Session',
   onClick,
   className = '',
   variant = 'primary',
