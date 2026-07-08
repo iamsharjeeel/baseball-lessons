@@ -214,3 +214,14 @@ Per `AGENT_INSTRUCTIONS.md`'s instruction to check actual Network tab timing rat
 - No new carousel dependency — native snap scroll only.
 
 **Next session should start with:** Preview Lineup at 390px (swipe) and 1440px (5 columns); no other section changes needed unless human review flags something.
+
+## Session 6 — 2026-07-08
+**Goal this session:** Rename primary CTA copy site-wide.
+
+**What got done:**
+- Updated `PrimaryButton` default label from "Book My Free Evaluation" to "Book my Intro Session" — covers hero, programs featured card, sticky mobile bar, and final CTA (all use `<PrimaryButton />` without overriding children).
+
+**Decisions made (and why):**
+- Single change in `PrimaryButton.tsx` only — one default drives every primary CTA; left secondary program-card label ("Book evaluation"), modal heading, and body copy unchanged per scoped request.
+
+**Next session should start with:** Confirm CTA wording with client if secondary/outline buttons should match.
