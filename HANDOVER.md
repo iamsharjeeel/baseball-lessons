@@ -214,3 +214,21 @@ Per `AGENT_INSTRUCTIONS.md`'s instruction to check actual Network tab timing rat
 - No new carousel dependency — native snap scroll only.
 
 **Next session should start with:** Preview Lineup at 390px (swipe) and 1440px (5 columns); no other section changes needed unless human review flags something.
+
+## Session 6 — 2026-07-21
+**Goal this session:** Fix live production at ads.nacsportscenter.com looking unstyled while Vercel preview aliases looked correct.
+
+**What got done:**
+- Diagnosed root cause: EasyList rule `://ads.$~image,~xmlhttprequest` blocks stylesheets/scripts/fonts on any `ads.*` host. Images still load (`~image`), so the page showed photos (e.g. ghost-kid) plus Times New Roman / no layout — matches the attached screenshot and the browser extension “blocked request” badge. Preview hosts (`*.vercel.app`) are not matched, so they looked fine.
+- Set production `assetPrefix` in `next.config.ts` to `https://baseball-lessons-neon.vercel.app` (override via `NEXT_PUBLIC_ASSET_PREFIX`) so `_next` CSS/JS/fonts are requested from a non-`ads` origin. Documented in README + CHANGELOG.
+
+**Decisions made (and why):**
+- Code mitigation first so production works without waiting on DNS. Long-term still recommend renaming the public hostname off `ads.*` (e.g. `lp.nacsportscenter.com`) and updating Meta ad URLs.
+
+**Waiting on client / open questions:**
+- DNS: add/point a non-`ads` subdomain at this Vercel project and switch Meta traffic off `ads.nacsportscenter.com`.
+- Confirm neon production alias stays stable, or set `NEXT_PUBLIC_ASSET_PREFIX` in Vercel if the alias changes.
+
+**Known issues / not done yet:** Domain rename itself is a DNS/Meta console step — not done from this repo.
+
+**Next session should start with:** After merge/deploy, verify `ads.nacsportscenter.com` HTML references CSS/JS on `baseball-lessons-neon.vercel.app` and that the page styles with an ad blocker enabled.
