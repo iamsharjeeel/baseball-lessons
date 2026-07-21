@@ -22,6 +22,12 @@ Built from a live Meta ads campaign. Primary offer: **Free Skills Evaluation**, 
 
 This is one conversion-focused page, not a multi-page site. Resist adding routing, a CMS, or extra dependencies unless a `HANDOVER.md` entry explicitly calls for it.
 
+## Production domain (ad blockers)
+**Do not use an `ads.*` subdomain for this page.** EasyList blocks stylesheets/scripts on `://ads.` hosts (images still load), so `ads.nacsportscenter.com` renders as unstyled HTML for anyone with uBlock/AdGuard/etc.
+
+- **Mitigation in code:** production builds set `assetPrefix` to `https://baseball-lessons-neon.vercel.app` so CSS/JS/fonts load from a non-`ads` host (`next.config.ts`). Override with `NEXT_PUBLIC_ASSET_PREFIX` if the alias changes.
+- **Recommended DNS fix:** point Meta ads at `lp.nacsportscenter.com` (or `go` / `train`) → same Vercel project, then drop the `ads.` hostname.
+
 ## Conversion goal
 Primary event: clicking/submitting "Book My Free Evaluation" → Meta Pixel `Lead` event fires → routes to booking (exact integration path is still TBD, see `HANDOVER.md` open questions).
 
