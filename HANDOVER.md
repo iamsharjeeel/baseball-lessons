@@ -232,3 +232,10 @@ Per `AGENT_INSTRUCTIONS.md`'s instruction to check actual Network tab timing rat
 **Known issues / not done yet:** Domain rename itself is a DNS/Meta console step — not done from this repo.
 
 **Next session should start with:** After merge/deploy, verify `ads.nacsportscenter.com` HTML references CSS/JS on `baseball-lessons-neon.vercel.app` and that the page styles with an ad blocker enabled.
+
+## Session 7 — 2026-07-21
+**Goal this session:** HitTrax video blank (grey 9:16 box) on production after ads.* CSS fix.
+
+**What got done:** Same EasyList `://ads.` rule blocks `media` (only image/xhr exempt). Pointed `HitTrax` video `src` at the neon asset host using the same production prefix as `assetPrefix`. Nothing else changed.
+
+**Next session should start with:** After deploy, confirm `#hittrax video` loads from neon with an ad blocker on.

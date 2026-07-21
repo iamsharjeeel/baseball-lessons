@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-07-21
+- Fix HitTrax video blank on `ads.*`: load mp4 from neon asset host (EasyList blocks media on `ads.*` too)
 - Fix production unstyled render on `ads.nacsportscenter.com`: serve `_next` CSS/JS/fonts via non-`ads` `assetPrefix` (EasyList blocks `://ads.` stylesheets/scripts)
 
 ## 2026-07-07

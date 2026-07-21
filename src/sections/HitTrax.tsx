@@ -26,6 +26,13 @@ const HITTRAX_STATS = [
   },
 ]
 
+const HITTRAX_VIDEO_SRC = `${
+  process.env.NEXT_PUBLIC_ASSET_PREFIX ||
+  (process.env.VERCEL_ENV === 'production'
+    ? 'https://baseball-lessons-neon.vercel.app'
+    : '')
+}/images/ghost-hitting-video.mp4`
+
 export function HitTrax() {
   return (
     <Section id="hittrax" background="light" ariaLabelledby="hittrax-heading">
@@ -52,7 +59,7 @@ export function HitTrax() {
         <FadeUp delay={0.1} className="flex justify-center lg:justify-end">
           <div className="relative aspect-[9/16] w-full max-w-[320px] overflow-hidden rounded-md border border-steel-300/25">
             <video
-              src="/images/ghost-hitting-video.mp4"
+              src={HITTRAX_VIDEO_SRC}
               autoPlay
               loop
               muted
